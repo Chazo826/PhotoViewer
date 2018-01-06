@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BandPhotoViewer</string>
+
+    <string name="login_title">Log in</string>
+    <string name="login_btn">Using Band account</string>
+
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+</resources>
