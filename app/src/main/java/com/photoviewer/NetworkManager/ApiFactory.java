@@ -1,11 +1,13 @@
 package com.photoviewer.NetworkManager;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.photoviewer.Utils.Constant;
+import com.photoviewer.Store.Constant;
+import com.photoviewer.Store.PreferenceFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +34,7 @@ public class ApiFactory {
 
     private BandService bandService;
     private OkHttpClient okHttpClient;
-
+    private PreferenceFactory preferenceFactory;
 
     public BandService getBandService() {
         Retrofit retrofit = createRetroFit();
@@ -44,6 +46,8 @@ public class ApiFactory {
     }
 
     private Retrofit createRetroFit(){
+        Log.d(this.getClass().getSimpleName(),"createRetrofit 들어옴");
+
         okHttpClient = createOkHttpClient();
         return new Retrofit.Builder()
                 .client(okHttpClient)
@@ -55,6 +59,8 @@ public class ApiFactory {
 
 
     private OkHttpClient createOkHttpClient() {
+        Log.d(this.getClass().getSimpleName(),"createOkHttpClient 들어옴");
+
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -85,11 +91,11 @@ public class ApiFactory {
         return okHttpClient;
     }
 
-    private String getBase64Encode(){
-        int client_id = Constant.CLIENT_ID;
-        String client_secret = Constant.CLIENT_SECRET;
+    public String getBase64Encode(){
+        Log.d(this.getClass().getSimpleName(),"base64Encode 들어옴");
 
-        String before_encode = client_id + ":" + client_secret;
-        return "BASIC " + Base64.encodeToString(before_encode.getBytes(), 0);
+        String combine_for_encode = Constant.CLIENT_ID + ":" + Constant.CLIENT_SECRET;
+        return "BASIC " + Base64.encodeToString(combine_for_encode.getBytes(), 0);
     }
+
 }

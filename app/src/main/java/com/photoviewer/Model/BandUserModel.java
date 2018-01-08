@@ -10,6 +10,8 @@ public class BandUserModel {
     /* For Oauth token */
     private String response_type;
     private String location; //여기서 정보받아야함
+
+    private String received_auth_code;
     private Integer client_id;
 
     /* For user's profile information */
@@ -25,11 +27,17 @@ public class BandUserModel {
     }
 
 
-    public String getResponseType() {
+    public String getReceived_auth_code(){return received_auth_code;}
+
+    public void setReceived_auth_code(String received_auth_code) {
+        this.received_auth_code = received_auth_code;
+    }
+
+    public String getResponse_Type() {
         return response_type;
     }
 
-    public void setResponseType(String response_type) {
+    public void setResponse_Type(String response_type) {
         this.response_type = response_type;
     }
 

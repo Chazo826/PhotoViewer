@@ -1,4 +1,4 @@
-package com.photoviewer.Utils;
+package com.photoviewer.Store;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,15 +9,14 @@ import android.content.SharedPreferences;
  * Created by user on 2018. 1. 6..
  */
 
-//SharedPreferences manager class
-public class Preference {
+public class PreferenceFactory {
     private final String PREF_NAME = "com.bandphotoviewer";
 
     public final static String PREF_LOGIN_AUTH_CODE = "PREF_LOGIN_AUTH_CODE";
-    public final static String PREF_LOGIN_COMPLETE = "PREF_LOGIN_COMPLETE";
+    public final static String PREF_LOGIN_ENCODE_AUTH = "PREF_LOGIN_ENCODE_AUTH";
     private Context mContext;
 
-    public Preference(Context context) {
+    public PreferenceFactory(Context context) {
         mContext = context;
     }
 

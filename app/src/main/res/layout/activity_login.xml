@@ -30,7 +30,7 @@
             android:text="@string/login_btn"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            android:onClick="@{LoginActivity::checkAuthorize}"/>
+            android:onClick="@{LoginActivity::setLoginButtonClickEvent}"/>
     </LinearLayout>
 </layout>
 
