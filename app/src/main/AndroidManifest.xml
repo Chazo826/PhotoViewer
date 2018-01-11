@@ -34,9 +34,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".View.Activity.MainActivity">
-
-        </activity>
+        <activity android:name=".View.Activity.MainActivity"/>
 
     </application>
 

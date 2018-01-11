@@ -15,88 +15,58 @@ import com.photoviewer.View.Activity.MainActivity;
  */
 
 public class LoginManager {
-
-    private static final String PREF_IS_LOGINED = "IsLogined";
-
     private static String PREF_LOGIN_ACCESS_TOKEN = "Login";
-    private static Integer PREF_EXPIRES_IN = 0;
 
-    private Context mContext;
-    private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
+    private static LoginManager loginManager;
 
-    public LoginManager(Context context) {
-        this.mContext = context;
-    }
+    private static SharedPreferences pref;
+    private static SharedPreferences.Editor editor;
 
-    public void setPrefLoginAccessToken(String prefLoginAccessToken) {
+    private LoginManager(Context mContext){
         pref = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
+    }
+
+    public static LoginManager getInstance(Context context) {
+        if(loginManager == null){
+            loginManager = new LoginManager(context.getApplicationContext());
+        }
+        return loginManager;
+    }
+
+    public static LoginManager getInstance(){
+        if(loginManager != null){
+            return loginManager;
+        }
+        throw new IllegalArgumentException("Should user getInstance at least once");
+    }
+
+    public void putString(String key, String val){
         editor = pref.edit();
-        editor.putString(PREF_LOGIN_ACCESS_TOKEN, prefLoginAccessToken);
+        editor.putString(key,val);
         editor.apply();
     }
 
-    public String getPrefLoginAccessToken() {
-        SharedPreferences prefAccessToken = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        return prefAccessToken.getString(PREF_LOGIN_ACCESS_TOKEN, null);
-    }
-
-    public void setPrefLoginUserKey(String userKey){
-        pref = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
+    public void putInteger(String key, Integer val){
         editor = pref.edit();
-        editor.putString(PREF_LOGIN_ACCESS_TOKEN, userKey);
+        editor.putInt(key,val);
         editor.apply();
     }
 
-    public String getPrefLoginUserKey(){
-        SharedPreferences getRefreshToken = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        return getRefreshToken.getString(PREF_LOGIN_ACCESS_TOKEN, null);
-    }
-
-    public void setPrefLoginRefreshToken(String prefLoginRefreshToken) {
-        pref = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
+    public void putBoolean(String key, Boolean val){
         editor = pref.edit();
-        editor.putString(PREF_LOGIN_ACCESS_TOKEN, prefLoginRefreshToken);
+        editor.putBoolean(key,val);
         editor.apply();
     }
 
-    public String getPrefLoginRefreshToken() {
-        SharedPreferences getRefreshToken = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        return getRefreshToken.getString(PREF_LOGIN_ACCESS_TOKEN, null);
+    public String getString(String key, String dfv){
+        return pref.getString(key, null);
     }
 
-    public void setPrefLoginTokenType(String prefLoginTokenType) {
-        pref = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        editor = pref.edit();
-        editor.putString(PREF_LOGIN_ACCESS_TOKEN, prefLoginTokenType);
-        editor.apply();
+    public int getInt(String key, int dfv){
+        return pref.getInt(key, 0);
     }
 
-    public String getPrefLoginTokenType() {
-        SharedPreferences getRefreshToken = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        return getRefreshToken.getString(PREF_LOGIN_ACCESS_TOKEN, null);
+    public boolean getInt(String key, boolean dfv){
+        return pref.getBoolean(key, dfv);
     }
-
-    public void setPrefLoginExpiresIn(Integer prefLoginExpiresIn) {
-        editor.putInt(PREF_LOGIN_ACCESS_TOKEN, prefLoginExpiresIn);
-        editor.apply();
-    }
-
-    public Integer getPrefLoginExpiresIn() {
-        SharedPreferences getRefreshToken = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-        return getRefreshToken.getInt(PREF_LOGIN_ACCESS_TOKEN, 0);
-    }
-
-    public void setPrefIsLogined(String isLogined){
-        pref = mContext.getSharedPreferences(PREF_IS_LOGINED, Context.MODE_PRIVATE);
-        editor = pref.edit();
-        editor.putBoolean(PREF_IS_LOGINED, true);
-        editor.apply();
-    }
-
-    public boolean isLogined(){
-        SharedPreferences isLogined = mContext.getSharedPreferences(PREF_IS_LOGINED, Context.MODE_PRIVATE);
-        return isLogined.getBoolean(PREF_IS_LOGINED, false);
-    }
-
 }

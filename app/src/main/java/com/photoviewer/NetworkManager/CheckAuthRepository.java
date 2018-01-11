@@ -3,11 +3,13 @@ package com.photoviewer.NetworkManager;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Utils.BandListManager;
 import com.photoviewer.Utils.LoginManager;
 
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -22,11 +24,12 @@ import static android.content.ContentValues.TAG;
 
 public class CheckAuthRepository {
 
-    private LoginManager loginManager;
     private BandListManager bandListManager;
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
+
     private BandService bandService = ApiFactory.getInstance().getBandService();
+    private LoginManager loginManager = LoginManager.getInstance();
 
     private static final String COMPLETE = "complete";
 
@@ -45,7 +48,12 @@ public class CheckAuthRepository {
                         .subscribe(new Consumer<AuthorizationInfo>() {
                             @Override
                             public void accept(AuthorizationInfo authorizationInfo) throws Exception {
-                               saveAuthInfoToPref(authorizationInfo);
+                                authorizationInfo.setAccess_token(authorizationInfo.getRefresh_token());
+                                authorizationInfo.setUser_key(authorizationInfo.getUser_key());
+                                authorizationInfo.setRefresh_token(authorizationInfo.getRefresh_token());
+                                authorizationInfo.setToken_type(authorizationInfo.getToken_type());
+                                authorizationInfo.setExpires_in(authorizationInfo.getExpires_in());
+                                saveAuthInfoToPref(authorizationInfo);
                             }
                         }, new Consumer<Throwable>() {
                             @Override
@@ -57,22 +65,17 @@ public class CheckAuthRepository {
     }
 
     private void saveAuthInfoToPref(AuthorizationInfo authorizationInfo) {
-        loginManager.setPrefLoginAccessToken(authorizationInfo.getAccess_token());
-        loginManager.setPrefLoginRefreshToken(authorizationInfo.getRefresh_token());
-        loginManager.setPrefLoginUserKey(authorizationInfo.getUser_key());
-        loginManager.setPrefLoginExpiresIn(authorizationInfo.getExpires_in());
-        loginManager.setPrefLoginTokenType(authorizationInfo.getToken_type());
-
+        loginManager.putString(authorizationInfo.getAccess_token(),null);
         authSaveComplete();
     }
 
-    public String deliverAccessToken(){
-        return loginManager.getPrefLoginAccessToken();
+    private String deliverAccessToken(){
+        return loginManager.getString("access_token",null);
     }
 
-    public void getBandListRetrofit(String access_token) {
+    public void getBandListRetrofit() {
         mCompositeDisposable.add(
-                bandService.getUserBandList(access_token)
+                bandService.getUserBandList(deliverAccessToken())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<BandListModel>() {
@@ -96,7 +99,6 @@ public class CheckAuthRepository {
         bandListModel.setBand_cover(bandListModel.getBand_cover());
         bandListModel.setMember_count(bandListModel.getMember_count());
 
-        Log.d(TAG, bandListModel.getResult_code() + bandListModel.getBand_name());
         authSaveComplete();
     }
 

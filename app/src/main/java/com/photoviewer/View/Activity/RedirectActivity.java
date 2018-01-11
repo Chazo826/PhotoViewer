@@ -17,7 +17,7 @@ public class RedirectActivity extends BaseActivity {
     private final String TAG = RedirectActivity.class.getSimpleName();
 
     private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
-    private LoginManager loginManager = new LoginManager(this);
+    private LoginManager loginManager = LoginManager.getInstance(getApplicationContext());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class RedirectActivity extends BaseActivity {
 
                 if(checkAuthRepository.authSaveComplete().contains("complete")){
                     startActivity(new Intent(RedirectActivity.this, MainActivity.class));
-                    loginManager.setPrefIsLogined("IsLogined");
+                    loginManager.putBoolean("isLogined", true);
                     finish();
                 } else {
                     startActivity(new Intent(RedirectActivity.this, LoginActivity.class));

@@ -19,17 +19,17 @@ public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding activityMainBinding;
 
-    private LoginManager loginManager = new LoginManager(this);
     private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
     private BandListModel bandListModel;
+    private LoginManager loginManager = LoginManager.getInstance(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loginManager.setPrefIsLogined("IsLogined");
         initDataBinding();
         initView();
+
     }
 
     private void initDataBinding(){
@@ -37,13 +37,13 @@ public class MainActivity extends BaseActivity {
 
         activityMainBinding.setBandListModel(bandListModel);
         activityMainBinding.setMainActivity(this);
-        //checkAuthRepository.getBandListRetrofit(checkAuthRepository.deliverAccessToken());
+
+        checkAuthRepository.getBandListRetrofit();
     }
 
     public void initView(){
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setSupportActionBar(activityMainBinding.toolbar);
-        //activityMainBinding.bandNameTitle.setText(loginManager.getPrefLoginAccessToken());
     }
 
     @Override
