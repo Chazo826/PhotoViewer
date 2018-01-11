@@ -10,8 +10,8 @@
             type="com.photoviewer.View.Activity.LoginActivity"/>
 
         <variable
-            name="CheckAuthRepository"
-            type="com.photoviewer.NetworkManager.CheckAuthRepository"/>
+            name="RequestRetrofitFactory"
+            type="com.photoviewer.NetworkManager.RequestRetrofitFactory"/>
     </data>
 
     <LinearLayout

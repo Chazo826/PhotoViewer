@@ -2,7 +2,10 @@ package com.photoviewer.NetworkManager;
 
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
+import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
+import com.photoviewer.Model.BandPhotoModel;
+import com.photoviewer.Model.BandUserProfileModel;
 
 import java.util.List;
 
@@ -22,15 +25,15 @@ public interface BandService {
     Observable<AuthorizationInfo> getAuthCodeForLogin(@Query("code") String code, @Header("Authorization") String authorization);
 
     @GET("v2/profile")
-    Observable<BandListModel> getUserProfile(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
+    Observable<BandUserProfileModel> getUserProfile(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
 
     @GET("v2.1/bands")
     Observable<BandListModel> getUserBandList(@Query("access_token") String accessToken);
 
     @GET("v2/band/albums")
-    Observable<JsonObject> getUserBandsAlbums(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
+    Observable<BandAlbumModel> getUserBandsAlbums(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
 
     @GET("v2/band/album/photos")
-    Observable<JsonObject> getUserBandsPhotos(@Query("access_token") String accessToken, @Query("band_key") String bandKey, @Query("photo_album_key") String photoAlbumKey);
+    Observable<BandPhotoModel> getUserBandsPhotos(@Query("access_token") String accessToken, @Query("band_key") String bandKey, @Query("photo_album_key") String photoAlbumKey);
 
 }

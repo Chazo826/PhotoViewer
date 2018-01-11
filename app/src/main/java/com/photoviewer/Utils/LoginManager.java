@@ -24,6 +24,7 @@ public class LoginManager {
         }
         return loginManager;
     }
+
     private void setPref(Context context){
         pref = context.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
     }

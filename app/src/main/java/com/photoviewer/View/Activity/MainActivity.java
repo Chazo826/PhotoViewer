@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.photoviewer.Model.BandListModel;
-import com.photoviewer.NetworkManager.CheckAuthRepository;
+import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.LoginManager;
 import com.photoviewer.databinding.ActivityMainBinding;
@@ -19,7 +19,7 @@ public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding activityMainBinding;
 
-    private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
+    private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private BandListModel bandListModel;
     private LoginManager loginManager = LoginManager.getInstance();
 
@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity {
         activityMainBinding.setBandListModel(bandListModel);
         activityMainBinding.setMainActivity(this);
 
-        checkAuthRepository.getBandListRetrofit();
     }
 
     public void initView(){

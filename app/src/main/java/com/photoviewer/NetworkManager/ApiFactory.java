@@ -22,12 +22,17 @@ public class ApiFactory {
 
     public static ApiFactory getInstance() { return  instance; }
 
-    public BandService getBandService() {
-        Retrofit retrofit = createRetroFit();
+    public BandService getAuthToken() {
+        Retrofit retrofit = createRetrofitForToken();
         return retrofit.create(BandService.class);
     }
 
-    private Retrofit createRetroFit(){
+    public BandService getBandService() {
+        Retrofit retrofit = createRetrofitForAll();
+        return retrofit.create(BandService.class);
+    }
+
+    private Retrofit createRetrofitForToken(){
         OkHttpClient okHttpClient = createOkHttpClient();
         return new Retrofit.Builder()
                 .client(okHttpClient)
@@ -37,6 +42,15 @@ public class ApiFactory {
                 .build();
     }
 
+    private Retrofit createRetrofitForAll(){
+        OkHttpClient okHttpClient = createOkHttpClient();
+        return new Retrofit.Builder()
+                .client(okHttpClient)
+                .baseUrl(Constant.SERVER_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
 
     private OkHttpClient createOkHttpClient() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();

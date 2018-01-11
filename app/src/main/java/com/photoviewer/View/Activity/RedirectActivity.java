@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import com.photoviewer.NetworkManager.CheckAuthRepository;
+import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.Utils.LoginManager;
 
 
@@ -16,7 +16,7 @@ import com.photoviewer.Utils.LoginManager;
 public class RedirectActivity extends BaseActivity {
     private final String TAG = RedirectActivity.class.getSimpleName();
 
-    private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
+    private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private LoginManager loginManager = LoginManager.getInstance();
 
     @Override
@@ -36,11 +36,10 @@ public class RedirectActivity extends BaseActivity {
             //로그인 토큰이 있는 경우
             if(appLinkData.toString().contains("code")){
                 String auth_token = appLinkData.getQueryParameter("code");
-                checkAuthRepository.checkAuthToken(auth_token);
+                requestRetrofitFactory.checkAuthToken(auth_token);
 
-                if(checkAuthRepository.authSaveComplete().contains("complete")){
+                if(requestRetrofitFactory.authSaveComplete().contains("complete")){
                     startActivity(new Intent(RedirectActivity.this, MainActivity.class));
-                    loginManager.putBoolean("isLogined", true);
                     finish();
                 } else {
                     startActivity(new Intent(RedirectActivity.this, LoginActivity.class));
