@@ -8,9 +8,10 @@
         <variable
             name="LoginActivity"
             type="com.photoviewer.View.Activity.LoginActivity"/>
+
         <variable
-            name="BandUserModel"
-            type="com.photoviewer.Model.BandUserModel"/>
+            name="CheckAuthRepository"
+            type="com.photoviewer.NetworkManager.CheckAuthRepository"/>
     </data>
 
     <LinearLayout
@@ -30,7 +31,7 @@
             android:text="@string/login_btn"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            android:onClick="@{LoginActivity::setLoginButtonClickEvent}"/>
+            android:onClick="@{LoginActivity::startActivity}"/>
     </LinearLayout>
 </layout>
 

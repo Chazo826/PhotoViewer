@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.photoviewer">
 
+<uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,14 +28,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="com.photoviewer"
                     android:scheme="https"
-                    android:path="/main/redirect"/>
+                    android:host="bandphotoviewer.com" />
 
             </intent-filter>
         </activity>
 
-        <activity android:name=".View.Activity.MainActivity"/>
+        <activity android:name=".View.Activity.MainActivity">
+
+        </activity>
 
     </application>
 

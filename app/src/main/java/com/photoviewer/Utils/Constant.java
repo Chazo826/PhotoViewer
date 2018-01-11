@@ -1,4 +1,6 @@
-package com.photoviewer.Store;
+package com.photoviewer.Utils;
+
+import android.net.Uri;
 
 /**
  * Created by user on 2017. 12. 20..
@@ -12,7 +14,7 @@ public interface Constant {
     String SERVER_URL = "https://openapi.band.us/";
     String AUTH_URL = "https://auth.band.us";
 
-    String GRANT_TYPE_FOR_API_REQUEST = "authorization_code";
-    String REDIRECT_URL = "https://com.photoviewer/main/redirect";
-    String AUTH_TOKEN = "";
+    String TOKEN_URL = "https://auth.band.us/oauth2/token";
+    String REDIRECT_URL = "https://bandphotoviewer.com";
+
 }
