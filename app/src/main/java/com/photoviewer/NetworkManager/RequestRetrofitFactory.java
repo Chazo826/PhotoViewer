@@ -50,11 +50,11 @@ public class RequestRetrofitFactory {
                         .subscribe(new Consumer<AuthorizationInfo>() {
                             @Override
                             public void accept(AuthorizationInfo authorizationInfo) throws Exception {
-                                authorizationInfo.setAccess_token(authorizationInfo.getRefresh_token());
-                                authorizationInfo.setUser_key(authorizationInfo.getUser_key());
-                                authorizationInfo.setRefresh_token(authorizationInfo.getRefresh_token());
-                                authorizationInfo.setToken_type(authorizationInfo.getToken_type());
-                                authorizationInfo.setExpires_in(authorizationInfo.getExpires_in());
+//                                authorizationInfo.setAccess_token(authorizationInfo.getRefresh_token());
+//                                authorizationInfo.setUser_key(authorizationInfo.getUser_key());
+//                                authorizationInfo.setRefresh_token(authorizationInfo.getRefresh_token());
+//                                authorizationInfo.setToken_type(authorizationInfo.getToken_type());
+//                                authorizationInfo.setExpires_in(authorizationInfo.getExpires_in());
                                 saveAuthInfoToPref(authorizationInfo);
                             }
                         }));
@@ -62,8 +62,9 @@ public class RequestRetrofitFactory {
     }
 
     private void saveAuthInfoToPref(AuthorizationInfo authorizationInfo) {
-        loginManager.putString(authorizationInfo.getAccess_token(),null);
-        Log.d("하이하이", loginManager.getString(authorizationInfo.getAccess_token(),null));
+        loginManager.putString(LoginManager.ACCESS_TOKEN_KEY, authorizationInfo.getAccess_token());
+        String access = loginManager.getString(LoginManager.ACCESS_TOKEN_KEY, null);
+        Log.d("하이하이", access,null);
         authSaveComplete();
     }
 

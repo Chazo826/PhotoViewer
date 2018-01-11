@@ -9,7 +9,8 @@ import android.content.SharedPreferences;
  */
 
 public class LoginManager {
-    private static String PREF_LOGIN_ACCESS_TOKEN = "Login";
+    public static final String PREF_LOGIN_ACCESS_TOKEN = "Login";
+    public static final String ACCESS_TOKEN_KEY = "access_token_key";
 
     private static LoginManager loginManager;
 
@@ -54,7 +55,7 @@ public class LoginManager {
     }
 
     public String getString(String key, String dfv){
-        return pref.getString(key, null);
+        return pref.getString(key, dfv);
     }
 
     public int getInt(String key, int dfv){
