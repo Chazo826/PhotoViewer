@@ -3,18 +3,20 @@ package com.photoviewer.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 
 /**
  * Created by user on 2018. 1. 6..
  */
 
 public class LoginManager {
-    private static String PREF_LOGIN_ACCESS_TOKEN = "Login";
+    public static final String PREF_LOGIN_ACCESS_TOKEN = "Login";
+    public static final String ACCESS_TOKEN_KEY = "access_token_key";
 
     private static LoginManager loginManager;
 
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
 
     private LoginManager(){}
 
@@ -35,26 +37,34 @@ public class LoginManager {
         }
     }
 
+    public void putJson(String key, Object o){
+        Gson gson = new Gson();
+        String json = gson.toJson(o);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(key, json);
+        editor.apply();
+    }
+    
     public void putString(String key, String val){
-        editor = pref.edit();
+        SharedPreferences.Editor editor = pref.edit();
         editor.putString(key,val);
         editor.apply();
     }
 
     public void putInteger(String key, Integer val){
-        editor = pref.edit();
+        SharedPreferences.Editor editor = pref.edit();
         editor.putInt(key,val);
         editor.apply();
     }
 
     public void putBoolean(String key, Boolean val){
-        editor = pref.edit();
+        SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean(key,val);
         editor.apply();
     }
 
     public String getString(String key, String dfv){
-        return pref.getString(key, null);
+        return pref.getString(key, dfv);
     }
 
     public int getInt(String key, int dfv){
