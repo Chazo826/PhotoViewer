@@ -1,13 +1,7 @@
 package com.photoviewer.Utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-
-import com.photoviewer.View.Activity.BaseActivity;
-import com.photoviewer.View.Activity.LoginActivity;
-import com.photoviewer.View.Activity.MainActivity;
 
 
 /**
@@ -19,25 +13,25 @@ public class LoginManager {
 
     private static LoginManager loginManager;
 
-    private static SharedPreferences pref;
-    private static SharedPreferences.Editor editor;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
 
-    private LoginManager(Context mContext){
-        pref = mContext.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
-    }
+    private LoginManager(){}
 
-    public static LoginManager getInstance(Context context) {
+    public static LoginManager getInstance() {
         if(loginManager == null){
-            loginManager = new LoginManager(context.getApplicationContext());
+            loginManager = new LoginManager();
         }
         return loginManager;
     }
+    private void setPref(Context context){
+        pref = context.getSharedPreferences(PREF_LOGIN_ACCESS_TOKEN, Context.MODE_PRIVATE);
+    }
 
-    public static LoginManager getInstance(){
-        if(loginManager != null){
-            return loginManager;
+    public void setContext(Context context){
+        if(pref == null){
+            setPref(context.getApplicationContext());
         }
-        throw new IllegalArgumentException("Should user getInstance at least once");
     }
 
     public void putString(String key, String val){

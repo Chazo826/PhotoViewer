@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.photoviewer.R;
 import com.photoviewer.Utils.Constant;
-import com.photoviewer.Utils.LoginManager;
 import com.photoviewer.databinding.ActivityLoginBinding;
 
 import java.net.URLEncoder;

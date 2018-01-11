@@ -17,12 +17,13 @@ public class RedirectActivity extends BaseActivity {
     private final String TAG = RedirectActivity.class.getSimpleName();
 
     private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
-    private LoginManager loginManager = LoginManager.getInstance(getApplicationContext());
+    private LoginManager loginManager = LoginManager.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handleIntent(getIntent());
+        loginManager.setContext(this);
     }
 
     private void handleIntent(Intent intent) {
