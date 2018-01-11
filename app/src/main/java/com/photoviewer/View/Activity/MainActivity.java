@@ -21,11 +21,13 @@ public class MainActivity extends BaseActivity {
 
     private CheckAuthRepository checkAuthRepository = new CheckAuthRepository();
     private BandListModel bandListModel;
-    private LoginManager loginManager = LoginManager.getInstance(getApplicationContext());
+    private LoginManager loginManager = LoginManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loginManager.setContext(this);
 
         initDataBinding();
         initView();
