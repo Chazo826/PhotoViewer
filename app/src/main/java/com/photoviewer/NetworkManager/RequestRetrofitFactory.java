@@ -2,6 +2,7 @@ package com.photoviewer.NetworkManager;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.Model.BandAlbumModel;
@@ -62,10 +63,12 @@ public class RequestRetrofitFactory {
     }
 
     private void saveAuthInfoToPref(AuthorizationInfo authorizationInfo) {
-        loginManager.putString(LoginManager.ACCESS_TOKEN_KEY, authorizationInfo.getAccess_token());
-        String access = loginManager.getString(LoginManager.ACCESS_TOKEN_KEY, null);
-        Log.d("하이하이", access,null);
+        loginManager.putJson(LoginManager.ACCESS_TOKEN_KEY, authorizationInfo);
         authSaveComplete();
+
+        AuthorizationInfo info = loginManager.getObject(LoginManager.ACCESS_TOKEN_KEY, null, AuthorizationInfo.class);
+        Log.d("Generic", info.getAccess_token());
+
     }
 
 

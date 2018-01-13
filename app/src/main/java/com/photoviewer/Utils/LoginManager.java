@@ -4,6 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 
 
 /**
@@ -44,7 +51,17 @@ public class LoginManager {
         editor.putString(key, json);
         editor.apply();
     }
-    
+
+//    public String getJson(String key, String dft){
+//
+//    }
+
+    public <T> T getObject(String key, String dft, Class<T> klass){
+        Gson gson = new Gson();
+        String json = pref.getString(key, dft);
+        return gson.fromJson(json, klass);
+    }
+
     public void putString(String key, String val){
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(key,val);
