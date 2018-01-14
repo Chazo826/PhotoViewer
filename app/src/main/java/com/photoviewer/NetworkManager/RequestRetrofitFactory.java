@@ -49,7 +49,6 @@ public class RequestRetrofitFactory {
 
     }
 
-    //액세스토큰 밴드이름key 필요
     public void getBandAlbumList(Consumer<JsonObject> consumer, String bandKey) {
         mCompositeDisposable.add(
                 bandService.getUserBandsAlbums(deliverAccessToken(), bandKey)
@@ -58,16 +57,14 @@ public class RequestRetrofitFactory {
                         .subscribe(consumer));
     }
 
-    //액세스토큰 밴드키,밴드앨범키 필요
 
-    public void getBandPhotoList(Consumer<JsonObject> consumer, String albumKey) {
+    public void getBandPhotoList(Consumer<JsonObject> consumer, String bandKey,String albumKey) {
         mCompositeDisposable.add(
-                bandService.getUserBandsPhotos(deliverAccessToken(), delieverBandKey(), albumKey)
+                bandService.getUserBandsPhotos(deliverAccessToken(), bandKey, albumKey)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(consumer));
     }
-
 
     public void saveJsonToPref(Object modelObject) {
         if (modelObject != null) {
@@ -89,10 +86,6 @@ public class RequestRetrofitFactory {
     private String delieverBandKey(){
         BandListModel bandListModel = pref.getObject(Pref.BAND_LIST_KEY, null, BandListModel.class);
         return bandListModel.getBand_key();
-    }
-
-    private String deliverPhotoAlbumKey(int bandAlbumIndex) {
-        return pref.getObject(Pref.BAND_LIST_KEY + bandAlbumIndex, null, BandListModel.class).getBand_key();
     }
 
 }

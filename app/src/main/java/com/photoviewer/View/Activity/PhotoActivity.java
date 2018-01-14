@@ -35,6 +35,7 @@ public class PhotoActivity extends BaseActivity {
     private Pref pref = Pref.getInstance();
 
     private String albumKey;
+    private String bandKey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,27 +46,26 @@ public class PhotoActivity extends BaseActivity {
     }
 
     public void getAlbumKeyIntent(Intent intent){
+        bandKey = intent.getStringExtra("band_key");
         albumKey = intent.getStringExtra("album_key");
-        requestRetrofitFactory.getBandPhotoList(consumer, albumKey);
+
+        requestRetrofitFactory.getBandPhotoList(consumer, bandKey, albumKey);
     }
 
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
-            //프리퍼런스로 저장 작업
             JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                     .get("items").getAsJsonArray();
-            pref.putString(Pref.BAND_PHOTO_KEY, jsonArray.toString());
+            pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
             initView();
         }
     };
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.photo_recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new PhotoListAdapter(parseArrayList()));
+        recyclerView.setAdapter(new PhotoListAdapter(parseArrayList(), albumKey));
     }
 
     public List<BandPhotoModel> parseArrayList(){

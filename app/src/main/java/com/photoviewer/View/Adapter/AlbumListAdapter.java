@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.photoviewer.Model.BandAlbumModel;
+import com.photoviewer.Model.BandListModel;
 import com.photoviewer.R;
 import com.photoviewer.View.Activity.PhotoActivity;
 
@@ -28,8 +29,11 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
 
     private List<BandAlbumModel> albumModels = new ArrayList<>();
 
-    public AlbumListAdapter(List<BandAlbumModel> bandAlbumModels) {
+    private String bandKey;
+
+    public AlbumListAdapter(List<BandAlbumModel> bandAlbumModels, String bandKey) {
         this.albumModels = bandAlbumModels;
+        this.bandKey = bandKey;
     }
 
     @Override
@@ -50,6 +54,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(holder.itemView.getContext(), PhotoActivity.class);
+                intent.putExtra("band_key", bandKey);
                 intent.putExtra("album_key", items.getPhoto_album_key());
                 holder.itemView.getContext().startActivity(intent);
             }

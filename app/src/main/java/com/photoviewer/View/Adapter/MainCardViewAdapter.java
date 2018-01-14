@@ -48,7 +48,6 @@ public class MainCardViewAdapter extends RecyclerView.Adapter<MainCardViewAdapte
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(holder.itemView.getContext(), AlbumListActivity.class);
-                intent.putExtra("band_name", bandlistitem.getName());
                 intent.putExtra("band_key", bandlistitem.getBand_key());
                 holder.itemView.getContext().startActivity(intent);
             }

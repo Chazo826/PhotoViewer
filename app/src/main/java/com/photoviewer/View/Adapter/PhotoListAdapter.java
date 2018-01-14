@@ -21,9 +21,11 @@ import java.util.List;
 public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.PhotoListViewHolder>{
 
     private List<BandPhotoModel> photoModels = new ArrayList<>();
+    private String albumKey;
 
-    public PhotoListAdapter(List<BandPhotoModel> photoModels) {
+    public PhotoListAdapter(List<BandPhotoModel> photoModels, String albumKey) {
         this.photoModels = photoModels;
+        this.albumKey = albumKey;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
 
         public PhotoListViewHolder(View itemView) {
             super(itemView);
-            photoImage = itemView.findViewById(R.id.photo_image);
+            photoImage = itemView.findViewById(R.id.item_grid_photo);
         }
     }
 }

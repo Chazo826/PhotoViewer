@@ -48,9 +48,7 @@ public class MainActivity extends BaseActivity {
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.main_recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new MainCardViewAdapter(parseArrayList()));
     }
 

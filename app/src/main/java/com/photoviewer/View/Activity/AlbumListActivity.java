@@ -37,7 +37,6 @@ public class AlbumListActivity extends BaseActivity {
     private Pref pref = Pref.getInstance();
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
 
-    private String bandName;
     private String bandKey;
 
     @Override
@@ -50,7 +49,6 @@ public class AlbumListActivity extends BaseActivity {
     }
 
     public void getBandkeyIntent(Intent intent){
-        bandName = intent.getStringExtra("band_name");
         bandKey = intent.getStringExtra("band_key");
         requestRetrofitFactory.getBandAlbumList(consumer, bandKey);
     }
@@ -60,21 +58,19 @@ public class AlbumListActivity extends BaseActivity {
         public void accept(JsonObject jsonObject) throws Exception{
             JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                     .get("items").getAsJsonArray();
-            pref.putString(Pref.BAND_ALBUM_KEY + bandName, jsonArray.toString());
+            pref.putString(Pref.BAND_ALBUM_KEY + bandKey, jsonArray.toString());
             initView();
         }
     };
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.album_recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new AlbumListAdapter(parseArrayList()));
+        recyclerView.setAdapter(new AlbumListAdapter(parseArrayList(), bandKey));
     }
 
     public List<BandAlbumModel> parseArrayList(){
-        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandName, null);
+        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandKey, null);
         Type listType = new TypeToken<ArrayList<BandAlbumModel>>(){}.getType();
         Gson gson = new Gson();
         ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);
