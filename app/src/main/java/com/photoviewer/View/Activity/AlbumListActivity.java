@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
@@ -34,9 +37,9 @@ public class AlbumListActivity extends BaseActivity {
     private Pref pref = Pref.getInstance();
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
 
-
     private String bandName;
     private String bandKey;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +55,12 @@ public class AlbumListActivity extends BaseActivity {
         requestRetrofitFactory.getBandAlbumList(consumer, bandKey);
     }
 
-    Consumer<BandAlbumModel> consumer = new Consumer<BandAlbumModel>() {
+    Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
-        public void accept(BandAlbumModel bandAlbumModel) throws Exception {
-            requestRetrofitFactory.saveJsonToPref(bandAlbumModel);
+        public void accept(JsonObject jsonObject) throws Exception{
+            JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                    .get("items").getAsJsonArray();
+            pref.putString(Pref.BAND_ALBUM_KEY + bandName, jsonArray.toString());
             initView();
         }
     };
@@ -69,7 +74,7 @@ public class AlbumListActivity extends BaseActivity {
     }
 
     public List<BandAlbumModel> parseArrayList(){
-        String json = pref.getString(Pref.BAND_ALBUM_KEY, null);
+        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandName, null);
         Type listType = new TypeToken<ArrayList<BandAlbumModel>>(){}.getType();
         Gson gson = new Gson();
         ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);

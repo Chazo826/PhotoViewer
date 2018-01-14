@@ -1,10 +1,10 @@
 package com.photoviewer.Model;
 
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by user on 2017. 12. 20..
@@ -52,6 +52,7 @@ public class BandAlbumModel implements Serializable {
     public void setCreated_at(Long created_at) {
         this.created_at = created_at;
     }
+
 
 
 }

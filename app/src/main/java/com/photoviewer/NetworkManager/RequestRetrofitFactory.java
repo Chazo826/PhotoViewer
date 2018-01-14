@@ -3,14 +3,11 @@ package com.photoviewer.NetworkManager;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
-import com.photoviewer.Model.BandUserProfileModel;
-import com.photoviewer.Utils.BandListManager;
 import com.photoviewer.Utils.Pref;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,7 +15,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by user on 2018. 1. 10..
@@ -54,27 +50,23 @@ public class RequestRetrofitFactory {
     }
 
     //액세스토큰 밴드이름key 필요
-    public void getBandAlbumList(Consumer<BandAlbumModel> consumer, String bandKey) {
+    public void getBandAlbumList(Consumer<JsonObject> consumer, String bandKey) {
         mCompositeDisposable.add(
-                bandService.getUserBandsAlbums(deliverAccessToken(), deliverBandKey(bandKey))
+                bandService.getUserBandsAlbums(deliverAccessToken(), bandKey)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(consumer));
     }
 
-    //    private void getBandPhotoList(int bandAlbumIndex) {
-//        mCompositeDisposable.add(
-//                bandService.getUserBandsPhotos(deliverAccessToken(), deliverBandKey(bandListIndex), deliverPhotoAlbumKey(bandAlbumIndex))
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(new Consumer<BandPhotoModel>() {
-//                            @Override
-//                            public void accept(BandPhotoModel bandPhotoModel) throws Exception {
-//                                saveJsonToPref(bandPhotoModel);
-//                            }
-//                        }));
-//    }
+    //액세스토큰 밴드키,밴드앨범키 필요
 
+    public void getBandPhotoList(Consumer<JsonObject> consumer, String albumKey) {
+        mCompositeDisposable.add(
+                bandService.getUserBandsPhotos(deliverAccessToken(), delieverBandKey(), albumKey)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(consumer));
+    }
 
 
     public void saveJsonToPref(Object modelObject) {
@@ -82,9 +74,9 @@ public class RequestRetrofitFactory {
             if (modelObject instanceof AuthorizationInfo) {
                 pref.putJson(Pref.ACCESS_TOKEN_KEY, modelObject);
             } else if (modelObject instanceof BandAlbumModel) {
-
+                pref.putJson(Pref.BAND_ALBUM_KEY, modelObject);
             } else {
-
+                pref.putJson(Pref.BAND_PHOTO_KEY, modelObject);
             }
         }
     }
@@ -94,18 +86,13 @@ public class RequestRetrofitFactory {
         return authorizationInfo.getAccess_token();
     }
 
-    private String deliverBandKey(String name) {
-        return pref.getObject(Pref.BAND_LIST_KEY + name, null, BandListModel.class).getBand_key();
+    private String delieverBandKey(){
+        BandListModel bandListModel = pref.getObject(Pref.BAND_LIST_KEY, null, BandListModel.class);
+        return bandListModel.getBand_key();
     }
 
     private String deliverPhotoAlbumKey(int bandAlbumIndex) {
         return pref.getObject(Pref.BAND_LIST_KEY + bandAlbumIndex, null, BandListModel.class).getBand_key();
-    }
-
-    private void saveJsonArrayToPref(JsonArray jsonArray) {
-        for (int index = 0; index < jsonArray.size(); index++) {
-            pref.putString(Pref.BAND_LIST_KEY + index, jsonArray.get(index).getAsString());
-        }
     }
 
 }

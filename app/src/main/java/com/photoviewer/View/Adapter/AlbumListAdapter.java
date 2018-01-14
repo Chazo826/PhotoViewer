@@ -16,6 +16,7 @@ import com.photoviewer.View.Activity.PhotoActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,16 +43,15 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         final BandAlbumModel items = albumModels.get(position);
 
         holder.albumTitle.setText(items.getName());
-        holder.photoCountInAlbum.setText(items.getPhoto_count());
+        holder.photoCountInAlbum.setText(items.getPhoto_count() +"");
         holder.albumCreatedDate.setText(getDate(items.getCreated_at()));
 
-        holder.albumPhotoImage.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(holder.albumPhotoImage.getContext(), PhotoActivity.class);
+                Intent intent = new Intent(holder.itemView.getContext(), PhotoActivity.class);
                 intent.putExtra("album_key", items.getPhoto_album_key());
-                //밴드키 넘기는 건 ?
-                holder.albumPhotoImage.getContext().startActivity(intent);
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }

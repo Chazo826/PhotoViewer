@@ -21,6 +21,7 @@ public class Pref {
 
     public static final String BAND_LIST_KEY = "bands";
     public static final String BAND_ALBUM_KEY = "albums";
+    public static final String BAND_PHOTO_KEY = "photos";
 
     private static Pref pref;
     private SharedPreferences sharedPreferences;

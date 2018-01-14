@@ -40,6 +40,8 @@
 
         <activity android:name=".View.Activity.AlbumListActivity" />
 
+        <activity android:name=".View.Activity.PhotoActivity"/>
+
     </application>
 
 </manifest>

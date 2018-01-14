@@ -1,14 +1,9 @@
 package com.photoviewer.View.Activity;
 
-import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -19,9 +14,6 @@ import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.MainCardViewAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
