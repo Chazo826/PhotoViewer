@@ -14,6 +14,8 @@ import java.io.Serializable;
 
 public class BandAlbumModel implements Serializable, Comparable<BandAlbumModel> {
 
+    @SerializedName("result_code") private String result_code;
+
     @SerializedName("photo_album_key") private String photo_album_key; //앨범 식별자
 
     @SerializedName("name") private String name;    //앨범명
@@ -22,6 +24,14 @@ public class BandAlbumModel implements Serializable, Comparable<BandAlbumModel> 
 
     @SerializedName("created_at") private Long created_at;    //앨범 생성일시
 
+
+    public String getResult_code() {
+        return result_code;
+    }
+
+    public void setResult_code(String result_code) {
+        this.result_code = result_code;
+    }
 
     public String getPhoto_album_key() {
         return photo_album_key;

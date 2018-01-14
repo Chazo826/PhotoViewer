@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -58,10 +60,13 @@ public class PhotoActivity extends BaseActivity {
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
-            JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                    .get("items").getAsJsonArray();
-            pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
-            initView();
+            int result = jsonObject.get("result_code").getAsInt();
+            if(result == 1){
+                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                        .get("items").getAsJsonArray();
+                pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
+                initView();
+            }
         }
     };
 
@@ -79,11 +84,6 @@ public class PhotoActivity extends BaseActivity {
         Gson gson = new Gson();
         ArrayList<BandPhotoModel> list = gson.fromJson(json, listType);
         return list;
-    }
-
-    @Override
-    public void onBackPressed(){
-
     }
 
     @Override

@@ -17,4 +17,9 @@ public class BaseActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
     }
+
+    public void setToolbar(){
+
+    }
+
 }

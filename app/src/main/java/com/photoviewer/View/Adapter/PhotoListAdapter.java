@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
 import com.photoviewer.View.Activity.PhotoDetailActivity;
@@ -40,7 +41,10 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     @Override
     public void onBindViewHolder(final PhotoListViewHolder holder, int position) {
         final BandPhotoModel items = photoModels.get(position);
-        Glide.with(holder.itemView.getContext()).load(items.getUrl()).into(holder.photoImage);
+        Glide.with(holder.itemView.getContext())
+                .load(items.getUrl())
+                .apply(RequestOptions.fitCenterTransform())
+                .into(holder.photoImage);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -66,8 +66,6 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         return showDate.format(date);
     }
 
-
-
     @Override
     public int getItemCount() {
         return albumModels == null ? 0 : albumModels.size();

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by user on 2018. 1. 14..
+ * 현재 클릭한 사진 position 값 들고 Url 들고 와야함
  */
 
 public class PhotoDetailAdapter extends PagerAdapter {

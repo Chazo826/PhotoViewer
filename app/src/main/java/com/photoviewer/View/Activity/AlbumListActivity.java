@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -59,14 +60,34 @@ public class AlbumListActivity extends BaseActivity {
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception{
-            JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                    .get("items").getAsJsonArray();
-            pref.putString(Pref.BAND_ALBUM_KEY + bandKey, jsonArray.toString());
-            initView();
+            int result = jsonObject.get("result_code").getAsInt();
+            if(result == 1){
+                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                        .get("items").getAsJsonArray();
+                pref.putString(Pref.BAND_ALBUM_KEY + bandKey, jsonArray.toString());
+                initView();
+            }
         }
     };
 
     public void initView(){
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+        }
+
+
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         RecyclerView recyclerView = findViewById(R.id.album_recyclerview);
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),3);
         recyclerView.setHasFixedSize(true);
@@ -89,11 +110,6 @@ public class AlbumListActivity extends BaseActivity {
     }
 
     private void loadNextPage() {
-
-    }
-
-    @Override
-    public void onBackPressed(){
 
     }
 

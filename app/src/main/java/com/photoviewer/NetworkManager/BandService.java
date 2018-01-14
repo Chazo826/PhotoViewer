@@ -2,12 +2,6 @@ package com.photoviewer.NetworkManager;
 
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
-import com.photoviewer.Model.BandAlbumModel;
-import com.photoviewer.Model.BandListModel;
-import com.photoviewer.Model.BandPhotoModel;
-import com.photoviewer.Model.BandUserProfileModel;
-
-import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -23,9 +17,6 @@ public interface BandService {
 
     @GET("oauth2/token?grant_type=authorization_code")
     Observable<AuthorizationInfo> getAuthCodeForLogin(@Query("code") String code, @Header("Authorization") String authorization);
-
-    @GET("v2/profile")
-    Observable<BandUserProfileModel> getUserProfile(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
 
     @GET("v2.1/bands")
     Observable<JsonObject> getUserBandList(@Query("access_token") String accessToken);

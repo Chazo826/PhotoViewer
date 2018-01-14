@@ -42,10 +42,14 @@ public class MainActivity extends BaseActivity {
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
-            JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                    .get("bands").getAsJsonArray();
-            pref.putString(Pref.BAND_LIST_KEY, jsonArray.toString());
-            initView();
+
+            int result = jsonObject.get("result_code").getAsInt();
+            if(result == 1){
+                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                        .get("bands").getAsJsonArray();
+                pref.putString(Pref.BAND_LIST_KEY, jsonArray.toString());
+                initView();
+            }
         }
     };
 

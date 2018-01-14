@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 
 public class BandPhotoModel implements Serializable {
+    @SerializedName("result_code") private String result_code;
 
     @SerializedName("photo_key") private String photo_key;   //사진 식별자
 

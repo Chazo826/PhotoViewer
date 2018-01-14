@@ -12,6 +12,7 @@ import java.util.List;
 
 public class BandListModel implements Serializable {
 
+    @SerializedName("result_code") private String result_code;
 
     @SerializedName("name") private String name;   //밴드 이름
 
