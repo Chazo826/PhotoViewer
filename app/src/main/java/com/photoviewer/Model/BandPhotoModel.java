@@ -1,30 +1,24 @@
 package com.photoviewer.Model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by user on 2017. 12. 20..
  */
 
-public class BandPhotoModel {
+public class BandPhotoModel implements Serializable {
 
-    private int result_code;
+    @SerializedName("photo_key") private String photo_key;   //사진 식별자
 
-    private String photo_key;   //사진 식별자
+    @SerializedName("url") private String url; //사진 URL
 
-    private String url; //사진 URL
+    @SerializedName("width") private int width;  //사진 넓이
 
-    private int width;  //사진 넓이
+    @SerializedName("height") private int height; //사진 높이
 
-    private int height; //사진 높이
-
-    private Long created_at;    //생성 일시
-
-    public int getResult_code() {
-        return result_code;
-    }
-
-    public void setResult_code(int result_code) {
-        this.result_code = result_code;
-    }
+    @SerializedName("created_at") private Long created_at;    //생성 일시
 
     public String getPhoto_key() {
         return photo_key;

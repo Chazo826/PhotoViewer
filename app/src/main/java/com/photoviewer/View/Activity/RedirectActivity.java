@@ -4,8 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
-import com.photoviewer.Utils.LoginManager;
+import com.photoviewer.Utils.Pref;
+
+import io.reactivex.functions.Consumer;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -17,37 +24,44 @@ public class RedirectActivity extends BaseActivity {
     private final String TAG = RedirectActivity.class.getSimpleName();
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
-    private LoginManager loginManager = LoginManager.getInstance();
+    private Pref pref = Pref.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handleIntent(getIntent());
-        loginManager.setContext(this);
+        pref.setContext(this);
     }
 
     private void handleIntent(Intent intent) {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
-        if(appLinkData.toString().contains("authorize")){
-            startActivity(new Intent(appLinkAction, appLinkData));
-            finish();
+        startActivity(new Intent(appLinkAction, appLinkData));
+        getRedirectResultInfo(appLinkData);
+        finish();
+    }
+
+    private void getRedirectResultInfo(Uri uri){
+        String auth_token = uri.getQueryParameter("code");
+        if (auth_token != null) {
+            requestRetrofitFactory.getRequestRetrofit(auth_token,consumer);
         } else {
-            //로그인 토큰이 있는 경우
-            if(appLinkData.toString().contains("code")){
-                String auth_token = appLinkData.getQueryParameter("code");
-                requestRetrofitFactory.checkAuthToken(auth_token);
-
-                if(requestRetrofitFactory.authSaveComplete().contains("complete")){
-                    startActivity(new Intent(RedirectActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    startActivity(new Intent(RedirectActivity.this, LoginActivity.class));
-                    finish();
-                }
-
-            }
+            startActivity(new Intent(RedirectActivity.this, LoginActivity.class));
+            finish();
         }
+    }
+
+    Consumer<AuthorizationInfo> consumer = new Consumer<AuthorizationInfo>() {
+        @Override
+        public void accept(AuthorizationInfo authorizationInfo) {
+            requestRetrofitFactory.saveJsonToPref(authorizationInfo);
+            startMainActivity();
+        }
+    };
+
+    public void startMainActivity() {
+        startActivity(new Intent(RedirectActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override

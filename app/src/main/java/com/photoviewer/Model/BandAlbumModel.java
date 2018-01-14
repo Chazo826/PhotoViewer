@@ -1,30 +1,25 @@
 package com.photoviewer.Model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by user on 2017. 12. 20..
  */
 
-public class BandAlbumModel {
+public class BandAlbumModel implements Serializable {
 
-    private int result_code;    // 결과 값 코드
+    @SerializedName("photo_album_key") private String photo_album_key; //앨범 식별자
 
-    private String photo_album_key; //앨범 식별자
+    @SerializedName("name") private String name;    //앨범명
 
-    private String name;    //앨범명
+    @SerializedName("photo_count") private int photo_count;    //앨범 내 사진 수
 
-    private int photo_count;    //앨범 내 사진 수
+    @SerializedName("created_at") private Long created_at;    //앨범 생성일시
 
-    private Long created_at;    //앨범 생성일시
-
-    private Object author;  // 앨범 생성자 정보
-
-    public int getResult_code() {
-        return result_code;
-    }
-
-    public void setResult_code(int result_code) {
-        this.result_code = result_code;
-    }
 
     public String getPhoto_album_key() {
         return photo_album_key;
@@ -58,11 +53,5 @@ public class BandAlbumModel {
         this.created_at = created_at;
     }
 
-    public Object getAuthor() {
-        return author;
-    }
 
-    public void setAuthor(Object author) {
-        this.author = author;
-    }
 }

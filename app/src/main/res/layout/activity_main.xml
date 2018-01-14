@@ -1,89 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <data>
-
-        <variable
-            name="MainActivity"
-            type="com.photoviewer.View.Activity.MainActivity" />
-
-        <variable
-            name="AuthorizationInfo"
-            type="com.photoviewer.Model.AuthorizationInfo"/>
-        <variable
-            name="BandListModel"
-            type="com.photoviewer.Model.BandListModel"/>
-
-        <variable
-            name="BandListViewModel"
-            type="com.photoviewer.ViewModel.BandListViewModel"/>
-    </data>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"/>
+            android:layout_height="55dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="30dp"
+            android:orientation="vertical"
             android:paddingTop="24dp">
 
-            <android.support.v7.widget.CardView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/main_recyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/card_margin">
-
-                <LinearLayout
-                    style="@style/Widget.CardContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/bandNameTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{AuthorizationInfo.access_token}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/bandImageView"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="15dp"
-                            android:textAlignment="center"
-                            android:text="밴드 Android"/>
-
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+</ScrollView>
 
-</layout>
 

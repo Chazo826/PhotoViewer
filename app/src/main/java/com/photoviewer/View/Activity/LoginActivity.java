@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.photoviewer.R;
@@ -25,12 +24,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ActivityLoginBinding activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         activityLoginBinding.setLoginActivity(this);
     }
 
-    public void startActivity(View view) {
+    public void startRedirectActivity(View view) {
         Intent intent = new Intent();
 
         intent.setData(getRedirectURL());
@@ -40,15 +38,17 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-    public Uri getRedirectURL(){
+    public Uri getRedirectURL() {
         return Uri.parse(
                 String.format("https://auth.band.us/oauth2/authorize?response_type=code&client_id=%s&redirect_uri=%s",
                         Constant.CLIENT_ID,
                         URLEncoder.encode(Constant.REDIRECT_URL), "utf-8"));
     }
 
+
+
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
     }
 

@@ -3,76 +3,82 @@ package com.photoviewer.View.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
-import com.photoviewer.Utils.LoginManager;
-import com.photoviewer.databinding.ActivityMainBinding;
+import com.photoviewer.Utils.Pref;
+import com.photoviewer.View.Adapter.MainCardViewAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity {
-
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private ActivityMainBinding activityMainBinding;
-
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
-    private BandListModel bandListModel;
-    private LoginManager loginManager = LoginManager.getInstance();
+    private Pref pref = Pref.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        loginManager.setContext(this);
-
-        initDataBinding();
-        initView();
-
+        pref.setContext(this);
+        requestRetrofitFactory.getBandListRetrofit(consumer);
     }
 
-    private void initDataBinding(){
-        activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        activityMainBinding.setBandListModel(bandListModel);
-        activityMainBinding.setMainActivity(this);
-
-    }
+    Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
+        @Override
+        public void accept(JsonObject jsonObject) throws Exception {
+            JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                    .get("bands").getAsJsonArray();
+            pref.putString(Pref.BAND_LIST_KEY, jsonArray.toString());
+            initView();
+        }
+    };
 
     public void initView(){
-        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        setSupportActionBar(activityMainBinding.toolbar);
+        RecyclerView recyclerView = findViewById(R.id.main_recyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new MainCardViewAdapter(parseArrayList()));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-
-        return true;
+    public List<BandListModel> parseArrayList(){
+        String json = pref.getString(Pref.BAND_LIST_KEY, null);
+        Type listType = new TypeToken<ArrayList<BandListModel>>(){}.getType();
+        Gson gson = new Gson();
+        ArrayList<BandListModel> list = gson.fromJson(json, listType);
+        return list;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.act_login_button) {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public void onBackPressed(){
 
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
 }

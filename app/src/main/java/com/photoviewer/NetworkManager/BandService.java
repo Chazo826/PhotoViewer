@@ -28,7 +28,7 @@ public interface BandService {
     Observable<BandUserProfileModel> getUserProfile(@Query("access_token") String accessToken, @Query("band_key") String bandKey);
 
     @GET("v2.1/bands")
-    Observable<BandListModel> getUserBandList(@Query("access_token") String accessToken);
+    Observable<JsonObject> getUserBandList(@Query("access_token") String accessToken);
 
     @GET("v2/band/albums")
     Observable<BandAlbumModel> getUserBandsAlbums(@Query("access_token") String accessToken, @Query("band_key") String bandKey);

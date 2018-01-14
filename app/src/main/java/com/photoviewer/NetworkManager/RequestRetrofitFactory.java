@@ -2,7 +2,8 @@ package com.photoviewer.NetworkManager;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.Model.BandAlbumModel;
@@ -10,177 +11,101 @@ import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.Model.BandUserProfileModel;
 import com.photoviewer.Utils.BandListManager;
-import com.photoviewer.Utils.LoginManager;
+import com.photoviewer.Utils.Pref;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by user on 2018. 1. 10..
- *
  */
 
 public class RequestRetrofitFactory {
-
-    private BandListManager bandListManager;
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
     private BandService tokenService = ApiFactory.getInstance().getAuthToken();
     private BandService bandService = ApiFactory.getInstance().getBandService();
 
-    private LoginManager loginManager = LoginManager.getInstance();
+    private Pref pref = Pref.getInstance();
 
-    private static final String COMPLETE = "complete";
 
-    public void checkAuthToken(String auth_token){
-        if (auth_token != null) {
-            getRequestRetrofit(auth_token);
-        }
-    }
-
-    private void getRequestRetrofit(String received_authorization_code) {
+    public void getRequestRetrofit(String received_authorization_code, Consumer<AuthorizationInfo> consumer) {
         mCompositeDisposable.add(
                 tokenService.getAuthCodeForLogin(received_authorization_code,
                         ApiFactory.getInstance().getBase64Encode())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<AuthorizationInfo>() {
-                            @Override
-                            public void accept(AuthorizationInfo authorizationInfo) throws Exception {
-//                                authorizationInfo.setAccess_token(authorizationInfo.getRefresh_token());
-//                                authorizationInfo.setUser_key(authorizationInfo.getUser_key());
-//                                authorizationInfo.setRefresh_token(authorizationInfo.getRefresh_token());
-//                                authorizationInfo.setToken_type(authorizationInfo.getToken_type());
-//                                authorizationInfo.setExpires_in(authorizationInfo.getExpires_in());
-                                saveAuthInfoToPref(authorizationInfo);
-                            }
-                        }));
+                        .subscribe(consumer));
 
     }
 
-    private void saveAuthInfoToPref(AuthorizationInfo authorizationInfo) {
-        loginManager.putJson(LoginManager.ACCESS_TOKEN_KEY, authorizationInfo);
-        authSaveComplete();
-
-        AuthorizationInfo info = loginManager.getObject(LoginManager.ACCESS_TOKEN_KEY, null, AuthorizationInfo.class);
-        Log.d("Generic", info.getAccess_token());
-
-    }
-
-
-    private void getUserProfileRetrofit(){
-        mCompositeDisposable.add(
-                bandService.getUserProfile(deliverAccessToken(), deliverBandKey())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<BandUserProfileModel>() {
-                            @Override
-                            public void accept(BandUserProfileModel bandUserProfileModel) throws Exception {
-                                saveUserProfilePref(bandUserProfileModel);
-                            }
-                        }));
-    }
-
-    private void saveUserProfilePref(BandUserProfileModel bandUserProfileModel) {
-        bandUserProfileModel.setResult_code(bandUserProfileModel.getResult_code());
-        bandUserProfileModel.setUser_key(bandUserProfileModel.getUser_key());
-        bandUserProfileModel.setProfile_image_url(bandUserProfileModel.getProfile_image_url());
-        bandUserProfileModel.setName(bandUserProfileModel.getName());
-        bandUserProfileModel.setIs_app_member(bandUserProfileModel.isIs_app_member());
-
-        authSaveComplete();
-    }
-
-    public void getBandListRetrofit() {
+    public void getBandListRetrofit(Consumer<JsonObject> consumer) {
         mCompositeDisposable.add(
                 bandService.getUserBandList(deliverAccessToken())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<BandListModel>() {
-                            @Override
-                            public void accept(BandListModel bandListModel) throws Exception {
-                                saveBandListPref(bandListModel);
-                            }
-                        }));
+                        .subscribe(consumer));
 
     }
 
-    private void saveBandListPref(BandListModel bandListModel) {
-        bandListModel.setResult_code(bandListModel.getResult_code());
-        bandListModel.setBand_name(bandListModel.getBand_name());
-        bandListModel.setBand_key(bandListModel.getBand_key());
-        bandListModel.setBand_cover(bandListModel.getBand_cover());
-        bandListModel.setMember_count(bandListModel.getMember_count());
-
-        authSaveComplete();
-    }
-
-    public String authSaveComplete(){
-        return COMPLETE;
-    }
-
-    private void getBandAlbumList(){
+    //액세스토큰 밴드이름key 필요
+    public void getBandAlbumList(Consumer<BandAlbumModel> consumer, String bandKey) {
         mCompositeDisposable.add(
-                bandService.getUserBandsAlbums(deliverAccessToken(),deliverBandKey())
+                bandService.getUserBandsAlbums(deliverAccessToken(), deliverBandKey(bandKey))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<BandAlbumModel>() {
-                            @Override
-                            public void accept(BandAlbumModel bandAlbumModel) throws Exception {
-                                saveAlbumListPref(bandAlbumModel);
-                            }
-                        }));
+                        .subscribe(consumer));
     }
 
-    private void saveAlbumListPref(BandAlbumModel bandAlbumModel){
-        bandAlbumModel.setResult_code(bandAlbumModel.getResult_code());
-        bandAlbumModel.setPhoto_album_key(bandAlbumModel.getPhoto_album_key());
-        bandAlbumModel.setName(bandAlbumModel.getName());
-        bandAlbumModel.setPhoto_count(bandAlbumModel.getPhoto_count());
-        bandAlbumModel.setCreated_at(bandAlbumModel.getCreated_at());
-        bandAlbumModel.setAuthor(bandAlbumModel.getAuthor());
+    //    private void getBandPhotoList(int bandAlbumIndex) {
+//        mCompositeDisposable.add(
+//                bandService.getUserBandsPhotos(deliverAccessToken(), deliverBandKey(bandListIndex), deliverPhotoAlbumKey(bandAlbumIndex))
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(new Consumer<BandPhotoModel>() {
+//                            @Override
+//                            public void accept(BandPhotoModel bandPhotoModel) throws Exception {
+//                                saveJsonToPref(bandPhotoModel);
+//                            }
+//                        }));
+//    }
 
-        authSaveComplete();
+
+
+    public void saveJsonToPref(Object modelObject) {
+        if (modelObject != null) {
+            if (modelObject instanceof AuthorizationInfo) {
+                pref.putJson(Pref.ACCESS_TOKEN_KEY, modelObject);
+            } else if (modelObject instanceof BandAlbumModel) {
+
+            } else {
+
+            }
+        }
     }
 
-    private void getBandPhotoList(){
-        mCompositeDisposable.add(
-                bandService.getUserBandsPhotos(deliverAccessToken(),deliverBandKey(), deliverPhotoAlbumKey())
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<BandPhotoModel>() {
-                            @Override
-                            public void accept(BandPhotoModel bandPhotoModel) throws Exception {
-                                savePhotoListPref(bandPhotoModel);
-                            }
-                        }));
+    private String deliverAccessToken() {
+        AuthorizationInfo authorizationInfo = pref.getObject(Pref.ACCESS_TOKEN_KEY, null, AuthorizationInfo.class);
+        return authorizationInfo.getAccess_token();
     }
 
-    private void savePhotoListPref(BandPhotoModel bandPhotoModel){
-        bandPhotoModel.setResult_code(bandPhotoModel.getResult_code());
-        bandPhotoModel.setPhoto_key(bandPhotoModel.getPhoto_key());
-        bandPhotoModel.setUrl(bandPhotoModel.getUrl());
-        bandPhotoModel.setWidth(bandPhotoModel.getWidth());
-        bandPhotoModel.setHeight(bandPhotoModel.getHeight());
-        bandPhotoModel.setCreated_at(bandPhotoModel.getCreated_at());
-
-        authSaveComplete();
+    private String deliverBandKey(String name) {
+        return pref.getObject(Pref.BAND_LIST_KEY + name, null, BandListModel.class).getBand_key();
     }
 
-    private String deliverAccessToken(){
-        return loginManager.getString("access_token",null);
+    private String deliverPhotoAlbumKey(int bandAlbumIndex) {
+        return pref.getObject(Pref.BAND_LIST_KEY + bandAlbumIndex, null, BandListModel.class).getBand_key();
     }
 
-    private String deliverBandKey(){
-        return loginManager.getString("band_key",null);
-    }
-
-    private String deliverPhotoAlbumKey(){
-        return loginManager.getString("photo_album_key",null);
+    private void saveJsonArrayToPref(JsonArray jsonArray) {
+        for (int index = 0; index < jsonArray.size(); index++) {
+            pref.putString(Pref.BAND_LIST_KEY + index, jsonArray.get(index).getAsString());
+        }
     }
 
 }

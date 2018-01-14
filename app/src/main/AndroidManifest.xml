@@ -13,12 +13,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".View.Activity.BaseActivity" />
 
-        <activity android:name=".View.Activity.LoginActivity">
+        <activity android:name=".View.Activity.TokenCheckActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".View.Activity.LoginActivity"/>
 
         <activity android:name=".View.Activity.RedirectActivity">
             <intent-filter>
@@ -35,6 +37,7 @@
         </activity>
 
         <activity android:name=".View.Activity.MainActivity"/>
+
         <activity android:name=".View.Activity.AlbumListActivity" />
 
     </application>
