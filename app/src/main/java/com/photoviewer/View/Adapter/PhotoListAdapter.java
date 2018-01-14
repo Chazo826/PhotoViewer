@@ -30,18 +30,18 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
 
     @Override
     public PhotoListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photoview, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_photoview, parent, false);
         return new PhotoListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PhotoListViewHolder holder, int position) {
+    public void onBindViewHolder(PhotoListViewHolder holder,int position) {
         BandPhotoModel items = photoModels.get(position);
         Glide.with(holder.itemView.getContext()).load(items.getUrl()).into(holder.photoImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //개별 사진 화면 띄우게 함
+                //개별 사진 화면 띄우게 함 -> ViewPager로 넘기고
             }
         });
     }

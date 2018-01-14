@@ -65,7 +65,9 @@ public class AlbumListActivity extends BaseActivity {
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.album_recyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new AlbumListAdapter(parseArrayList(), bandKey));
     }
 
