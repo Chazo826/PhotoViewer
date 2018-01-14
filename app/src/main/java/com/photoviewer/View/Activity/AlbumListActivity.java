@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.photoviewer.databinding.ActivityAlbumpageBinding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -65,7 +68,7 @@ public class AlbumListActivity extends BaseActivity {
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.album_recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new AlbumListAdapter(parseArrayList(), bandKey));
@@ -76,6 +79,7 @@ public class AlbumListActivity extends BaseActivity {
         Type listType = new TypeToken<ArrayList<BandAlbumModel>>(){}.getType();
         Gson gson = new Gson();
         ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);
+        Collections.reverse(list);
         return list;
     }
 

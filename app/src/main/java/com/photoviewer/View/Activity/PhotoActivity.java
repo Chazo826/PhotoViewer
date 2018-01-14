@@ -21,6 +21,7 @@ import com.photoviewer.View.Adapter.PhotoListAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;

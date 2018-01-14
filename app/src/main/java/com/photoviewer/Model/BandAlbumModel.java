@@ -1,6 +1,8 @@
 package com.photoviewer.Model;
 
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * Created by user on 2017. 12. 20..
  */
 
-public class BandAlbumModel implements Serializable {
+public class BandAlbumModel implements Serializable, Comparable<BandAlbumModel> {
 
     @SerializedName("photo_album_key") private String photo_album_key; //앨범 식별자
 
@@ -53,6 +55,8 @@ public class BandAlbumModel implements Serializable {
         this.created_at = created_at;
     }
 
-
-
+    @Override
+    public int compareTo(@NonNull BandAlbumModel bandAlbumModel) {
+        return getCreated_at().compareTo(bandAlbumModel.getCreated_at());
+    }
 }

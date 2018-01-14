@@ -7,17 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.photoviewer.Model.BandAlbumModel;
-import com.photoviewer.Model.BandListModel;
 import com.photoviewer.R;
 import com.photoviewer.View.Activity.PhotoActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -66,6 +65,8 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         SimpleDateFormat showDate = new SimpleDateFormat("yyyy년 MM월");
         return showDate.format(date);
     }
+
+
 
     @Override
     public int getItemCount() {

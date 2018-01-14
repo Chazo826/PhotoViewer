@@ -1,5 +1,6 @@
 package com.photoviewer.View.Adapter;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
+import com.photoviewer.View.Activity.PhotoDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
 
     private List<BandPhotoModel> photoModels = new ArrayList<>();
     private String albumKey;
+    private String photoKey;
 
     public PhotoListAdapter(List<BandPhotoModel> photoModels, String albumKey) {
         this.photoModels = photoModels;
@@ -35,13 +38,17 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
     }
 
     @Override
-    public void onBindViewHolder(PhotoListViewHolder holder,int position) {
-        BandPhotoModel items = photoModels.get(position);
+    public void onBindViewHolder(final PhotoListViewHolder holder, int position) {
+        final BandPhotoModel items = photoModels.get(position);
         Glide.with(holder.itemView.getContext()).load(items.getUrl()).into(holder.photoImage);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //개별 사진 화면 띄우게 함 -> ViewPager로 넘기고
+                Intent intent = new Intent(holder.itemView.getContext(), PhotoDetailActivity.class);
+                intent.putExtra("photo_key", items.getPhoto_key());
+                intent.putExtra("url", items.getUrl());
+                holder.itemView.getContext().startActivity(intent);
             }
         });
     }

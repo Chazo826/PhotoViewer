@@ -1,6 +1,7 @@
 package com.photoviewer.View.Activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.photoviewer.View.Adapter.MainCardViewAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -49,7 +51,7 @@ public class MainActivity extends BaseActivity {
 
     public void initView(){
         RecyclerView recyclerView = findViewById(R.id.main_recyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new MainCardViewAdapter(parseArrayList()));
