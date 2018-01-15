@@ -12,15 +12,17 @@ import java.util.List;
 
 public class BandListModel implements Serializable {
 
-    @SerializedName("result_code") private String result_code;
+    @SerializedName("name")
+    private String name;   //밴드 이름
 
-    @SerializedName("name") private String name;   //밴드 이름
+    @SerializedName("band_key")
+    private String band_key; // 밴드 식별자
 
-    @SerializedName("band_key") private String band_key; // 밴드 식별자
+    @SerializedName("cover")
+    private String cover; // 밴드 커버 이미지 url
 
-    @SerializedName("cover") private String cover; // 밴드 커버 이미지 url
-
-    @SerializedName("member_count") private Integer member_count; // 밴드의 멤버 수
+    @SerializedName("member_count")
+    private Integer member_count; // 밴드의 멤버 수
 
 
     public String getName() {
@@ -47,14 +49,13 @@ public class BandListModel implements Serializable {
         this.cover = cover;
     }
 
-    public Integer getMember_count() {
+    public int getMember_count() {
         return member_count;
     }
 
     public void setMember_count(Integer member_count) {
         this.member_count = member_count;
     }
-
 
 
 }

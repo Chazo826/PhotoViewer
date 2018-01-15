@@ -1,14 +1,53 @@
 package com.photoviewer.ViewModel;
 
-import com.photoviewer.Model.BandListModel;
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
 
-import java.util.List;
+import com.bumptech.glide.Glide;
+import com.photoviewer.Model.BandListModel;
+import com.photoviewer.Utils.Pref;
 
 /**
- * Created by user on 2018. 1. 11..
+ * 여기서는 모델데이터 가지고 룰루랄라해야함
  */
 
-public class BandListViewModel {
+public class BandListViewModel extends AbstractViewModel {
 
-    private List<BandListModel> result_data; //밴드목록
+    private BandListModel bandListModel;
+
+    @Override
+    public BindListViewType getViewType() {
+        return BindListViewType.BANDLIST;
+    }
+
+    public BandListViewModel(BandListModel bandListModel, ClickListener clickListener) {
+        super(clickListener);
+        this.bandListModel = bandListModel;
+    }
+
+    public void onItemClick() {
+        clickListener.onItemClick(bandListModel);
+    }
+
+    public String getName() {
+        return bandListModel.getName();
+    }
+
+    public String getCover() {
+        return bandListModel.getCover();
+    }
+
+    public String getBandKey() {
+        return bandListModel.getBand_key();
+    }
+
+    public int getMemberCount() {
+        return bandListModel.getMember_count();
+    }
+
+    @BindingAdapter("bind:imageUrl")
+    public static void setBandCoverImageView(ImageView imageView, String imageUrl) {
+        Glide.with(imageView.getContext()).load(imageUrl).into(imageView);
+    }
+
 }

@@ -9,8 +9,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.photoviewer.R;
 
-import uk.co.senab.photoview.PhotoView;
-
 /**
  * Created by user on 2018. 1. 14..
  */
@@ -26,7 +24,7 @@ public class PhotoDetailActivity extends BaseActivity {
     }
 
     public void initView(){
-        PhotoView photoView = findViewById(R.id.photo_detail_viewpager);
+//        PhotoView photoView = findViewById(R.id.photo_detail_viewpager);
         //Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(photoView);
     }
 

@@ -15,8 +15,6 @@ import com.photoviewer.View.Activity.PhotoActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +58,7 @@ public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.Albu
         });
     }
 
+    //BindingConversion으로 바꿀 것
     public String getDate(long millisecond) {
         Date date = new Date(millisecond);
         SimpleDateFormat showDate = new SimpleDateFormat("yyyy년 MM월");

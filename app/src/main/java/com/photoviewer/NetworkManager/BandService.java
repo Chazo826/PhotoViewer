@@ -14,7 +14,7 @@ import retrofit2.http.Query;
  */
 
 public interface BandService {
-
+//타입 확인
     @GET("oauth2/token?grant_type=authorization_code")
     Observable<AuthorizationInfo> getAuthCodeForLogin(@Query("code") String code, @Header("Authorization") String authorization);
 

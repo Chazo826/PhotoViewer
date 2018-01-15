@@ -9,17 +9,21 @@ import java.io.Serializable;
  */
 
 public class BandPhotoModel implements Serializable {
-    @SerializedName("result_code") private String result_code;
 
-    @SerializedName("photo_key") private String photo_key;   //사진 식별자
+    @SerializedName("photo_key")
+    private String photo_key;   //사진 식별자
 
-    @SerializedName("url") private String url; //사진 URL
+    @SerializedName("url")
+    private String url; //사진 URL
 
-    @SerializedName("width") private int width;  //사진 넓이
+    @SerializedName("width")
+    private int width;  //사진 넓이
 
-    @SerializedName("height") private int height; //사진 높이
+    @SerializedName("height")
+    private int height; //사진 높이
 
-    @SerializedName("created_at") private Long created_at;    //생성 일시
+    @SerializedName("created_at")
+    private Long created_at;    //생성 일시
 
     public String getPhoto_key() {
         return photo_key;

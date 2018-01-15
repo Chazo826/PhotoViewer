@@ -10,11 +10,20 @@ import java.io.Serializable;
 
 public class AuthorizationInfo implements Serializable {
 
-    @SerializedName("access_token") private String access_token;    //접근 권한이 있는 토큰
-    @SerializedName("token_type") private String token_type;  // 토큰 타입
-    @SerializedName("refresh_token") private String refresh_token;   //토큰 만료 시 발급되는 재사용 토큰
-    @SerializedName("expires_in") private Integer expires_in;    // 토큰 유효기간
-    @SerializedName("user_key") private String user_key;    // 유저 식별키
+    @SerializedName("access_token")
+    private String access_token;    //접근 권한이 있는 토큰
+
+    @SerializedName("token_type")
+    private String token_type;  // 토큰 타입
+
+    @SerializedName("refresh_token")
+    private String refresh_token;   //토큰 만료 시 발급되는 재사용 토큰
+
+    @SerializedName("expires_in")
+    private Integer expires_in;    // 토큰 유효기간
+
+    @SerializedName("user_key")
+    private String user_key;    // 유저 식별키
 
 
     public AuthorizationInfo(String access_token, String token_type, String refresh_token, Integer expires_in, String user_key) {
@@ -65,4 +74,6 @@ public class AuthorizationInfo implements Serializable {
     public void setExpires_in(Integer expires_in) {
         this.expires_in = expires_in;
     }
+
+
 }

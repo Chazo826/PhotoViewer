@@ -20,6 +20,7 @@ import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.PhotoListAdapter;
+import com.photoviewer.databinding.ActivityPhotopageBinding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,11 +33,12 @@ import io.reactivex.functions.Consumer;
  * Created by user on 2017. 12. 20..
  */
 
-public class PhotoActivity extends BaseActivity {
+public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
+    private RecyclerView recyclerView;
 
     private String albumKey;
     private String bandKey;
@@ -44,13 +46,13 @@ public class PhotoActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photopage);
 
+        initDataBinding();
         pref.setContext(this);
         getAlbumKeyIntent(getIntent());
     }
 
-    public void getAlbumKeyIntent(Intent intent){
+    public void getAlbumKeyIntent(Intent intent) {
         bandKey = intent.getStringExtra("band_key");
         albumKey = intent.getStringExtra("album_key");
 
@@ -61,7 +63,7 @@ public class PhotoActivity extends BaseActivity {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
             int result = jsonObject.get("result_code").getAsInt();
-            if(result == 1){
+            if (result == 1) {
                 JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                         .get("items").getAsJsonArray();
                 pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
@@ -70,17 +72,23 @@ public class PhotoActivity extends BaseActivity {
         }
     };
 
-    public void initView(){
-        RecyclerView recyclerView = findViewById(R.id.photo_recyclerview);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,3);
+    public void initDataBinding() {
+        setBinding(R.layout.activity_photopage);
+    }
+
+    public void initView() {
+        recyclerView = getBinding().photoRecyclerview;
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setAdapter(new PhotoListAdapter(parseArrayList(), albumKey));
     }
 
-    public List<BandPhotoModel> parseArrayList(){
+    public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
-        Type listType = new TypeToken<ArrayList<BandPhotoModel>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<BandPhotoModel>>() {
+        }.getType();
         Gson gson = new Gson();
         ArrayList<BandPhotoModel> list = gson.fromJson(json, listType);
         return list;

@@ -1,31 +1,26 @@
 package com.photoviewer.View.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
-import com.photoviewer.View.Adapter.MainCardViewAdapter;
-
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.photoviewer.View.Adapter.BandListAdapter;
+import com.photoviewer.ViewModel.ClickListener;
+import com.photoviewer.databinding.ActivityMainBinding;
 
 import io.reactivex.functions.Consumer;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private RecyclerView bandListRecyclerview;
+    private BandListAdapter adapter;
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
@@ -33,8 +28,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        initBinding();
         pref.setContext(this);
         requestRetrofitFactory.getBandListRetrofit(consumer);
     }
@@ -42,9 +37,8 @@ public class MainActivity extends BaseActivity {
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
-
             int result = jsonObject.get("result_code").getAsInt();
-            if(result == 1){
+            if (result == 1) {
                 JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                         .get("bands").getAsJsonArray();
                 pref.putString(Pref.BAND_LIST_KEY, jsonArray.toString());
@@ -53,31 +47,33 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    public void initView(){
-        RecyclerView recyclerView = findViewById(R.id.main_recyclerview);
-        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),2);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new MainCardViewAdapter(parseArrayList()));
+    public void initBinding() {
+        setBinding(R.layout.activity_main);
     }
 
-    public List<BandListModel> parseArrayList(){
-        String json = pref.getString(Pref.BAND_LIST_KEY, null);
-        Type listType = new TypeToken<ArrayList<BandListModel>>(){}.getType();
-        Gson gson = new Gson();
-        ArrayList<BandListModel> list = gson.fromJson(json, listType);
-        return list;
+    public void initView() {
+        bandListRecyclerview = getBinding().bandListRecyclerview;
+        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
+        bandListRecyclerview.setHasFixedSize(true);
+        bandListRecyclerview.setLayoutManager(layoutManager);
+
+        adapter = new BandListAdapter(getApplicationContext(), bandlistlistener);
+        bandListRecyclerview.setAdapter(adapter);
+        adapter.parseArrayList();
     }
 
-    @Override
-    public void onBackPressed(){
-
-    }
+    ClickListener bandlistlistener = new ClickListener() {
+        @Override
+        public void onItemClick(BandListModel bandListModel) {
+            Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
+            intent.putExtra("band_key", bandListModel.getBand_key());
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
 }

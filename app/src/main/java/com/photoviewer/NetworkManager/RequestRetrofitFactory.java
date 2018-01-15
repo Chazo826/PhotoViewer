@@ -30,6 +30,7 @@ public class RequestRetrofitFactory {
     private Pref pref = Pref.getInstance();
 
 
+    //반환 타입 Observable로, -> service를 single로 쏘게 바꿀 것
     public void getRequestRetrofit(String received_authorization_code, Consumer<AuthorizationInfo> consumer) {
         mCompositeDisposable.add(
                 tokenService.getAuthCodeForLogin(received_authorization_code,
