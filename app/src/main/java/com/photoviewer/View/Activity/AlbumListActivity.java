@@ -100,7 +100,7 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
 
         adapter = new RecyclerItemAdapter(getApplicationContext(), albumListListener);
         albumListRecyclerView.setAdapter(adapter);
-        adapter.setAlbumSetItemList(parArrayAlbumList());
+        adapter.setAlbumItemList(parArrayAlbumList());
     }
 
     ClickListener albumListListener = new ClickListener() {

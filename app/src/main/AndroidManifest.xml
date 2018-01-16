@@ -41,6 +41,8 @@
 
         <activity android:name=".View.Activity.PhotoActivity"/>
 
+        <activity android:name=".View.Activity.PhotoDetailActivity"/>
+
     </application>
 
 </manifest>

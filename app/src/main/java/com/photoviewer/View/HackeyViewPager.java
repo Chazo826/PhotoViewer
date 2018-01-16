@@ -9,13 +9,13 @@ import android.view.MotionEvent;
  * Created by user on 2018. 1. 14..
  */
 
-public class CustomViewPager extends ViewPager {
+public class HackeyViewPager extends ViewPager {
 
-    public CustomViewPager(Context context) {
+    public HackeyViewPager(Context context) {
         super(context);
     }
 
-    public CustomViewPager(Context context, AttributeSet attrs) {
+    public HackeyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

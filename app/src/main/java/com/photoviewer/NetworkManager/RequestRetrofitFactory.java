@@ -10,6 +10,9 @@ import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.Utils.Pref;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -29,8 +32,6 @@ public class RequestRetrofitFactory {
 
     private Pref pref = Pref.getInstance();
 
-
-    //반환 타입 Observable로, -> service를 single로 쏘게 바꿀 것
     public void getRequestRetrofit(String received_authorization_code, Consumer<AuthorizationInfo> consumer) {
         mCompositeDisposable.add(
                 tokenService.getAuthCodeForLogin(received_authorization_code,

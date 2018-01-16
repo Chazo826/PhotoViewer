@@ -52,7 +52,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         return list;
     }
 
-
     public void setPhotoItemList(List<BandPhotoModel> bandPhotoModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
 
@@ -66,7 +65,7 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
 
 
     //앨범모델 리스트로 들고있음
-    public void setAlbumSetItemList(List<BandAlbumModel> bandAlbumModels) {
+    public void setAlbumItemList(List<BandAlbumModel> bandAlbumModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
 
         for (BandAlbumModel bandAlbumModel : bandAlbumModels) {
@@ -79,7 +78,7 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
 
 
     //뷰모델을 리스트로 들고있음
-    public void setItemList(List<BandListModel> bandListModels) {
+    public void setBandItemList(List<BandListModel> bandListModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
 
         for (BandListModel bandListModel : bandListModels) {
@@ -89,8 +88,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         this.itemList = itemList;
         notifyDataSetChanged();
     }
-
-    //BindingConversion으로 바꿀 것
 
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

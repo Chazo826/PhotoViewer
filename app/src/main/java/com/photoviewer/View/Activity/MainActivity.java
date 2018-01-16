@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         adapter = new RecyclerItemAdapter(getApplicationContext(), bandListListener);
         bandListRecyclerview.setAdapter(adapter);
-        adapter.setItemList(adapter.parseArrayList());
+        adapter.setBandItemList(adapter.parseArrayList());
     }
 
     ClickListener bandListListener = new ClickListener() {

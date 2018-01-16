@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -93,13 +94,15 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
     ClickListener photolistListinener = new ClickListener() {
         @Override
         public void onItemClick(Object o) {
-            if(o instanceof BandPhotoModel){
+            if (o instanceof BandPhotoModel) {
                 Intent intent = new Intent(PhotoActivity.this, PhotoDetailActivity.class);
-                intent.putExtra("photo_key",((BandPhotoModel) o).getPhoto_key());
+                intent.putExtra("photo_key", ((BandPhotoModel) o).getPhoto_key());
+                intent.putExtra("url", ((BandPhotoModel) o).getUrl());
                 startActivity(intent);
             }
         }
     };
+
 
     public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
