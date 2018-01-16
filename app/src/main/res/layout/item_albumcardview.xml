@@ -1,59 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.CardView
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.photoviewer.ViewModel.AlbumListViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:layout_margin="@dimen/card_margin">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            style="@style/Widget.CardContent"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="160dp"
+            android:layout_margin="@dimen/card_margin"
+            android:onClick="@{() -> viewModel.onItemClick()}">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                style="@style/Widget.CardContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/album_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.albumName}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/photo_count_in_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="11sp"
+                        bind:photoCount="@{viewModel.photoCount}" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/album_title"
+                    android:id="@+id/album_create_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/photo_count_in_album"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    bind:dateCount="@{viewModel.createdat}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textSize="11sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/album_image"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                </LinearLayout>
             </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-            <TextView
-                android:id="@+id/album_create_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textSize="11sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/album_image"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-</FrameLayout>
+    </FrameLayout>
+</layout>

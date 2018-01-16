@@ -1,29 +1,64 @@
 package com.photoviewer.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
+import com.photoviewer.Utils.Pref;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.net.Inet4Address;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by user on 2018. 1. 11..
  */
 
-public class BandListModel implements Serializable {
+public class BandListModel implements Parcelable {
 
-    @SerializedName("name")
+    private Pref pref = Pref.getInstance();
+
     private String name;   //밴드 이름
-
-    @SerializedName("band_key")
     private String band_key; // 밴드 식별자
-
-    @SerializedName("cover")
     private String cover; // 밴드 커버 이미지 url
+    private int member_count; // 밴드의 멤버 수
 
-    @SerializedName("member_count")
-    private Integer member_count; // 밴드의 멤버 수
+    public BandListModel(){}
 
+    public BandListModel(Parcel in){
+        readFromParcel(in);
+    }
+
+    public BandListModel(String name, String band_key, String cover, int member_count) {
+        this.name = name;
+        this.band_key = band_key;
+        this.cover = cover;
+        this.member_count = member_count;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    public void readFromParcel(Parcel in){
+        name = in.readString();
+        band_key = in.readString();
+        cover = in.readString();
+        member_count = in.readInt();
+    }
+
+    public void writeToParcel(Parcel dest, int flag) {
+        dest.writeString(name);
+        dest.writeString(band_key);
+        dest.writeString(cover);
+        dest.writeInt(member_count);
+    }
 
     public String getName() {
         return name;
@@ -53,9 +88,25 @@ public class BandListModel implements Serializable {
         return member_count;
     }
 
-    public void setMember_count(Integer member_count) {
+    public void setMember_count(int member_count) {
         this.member_count = member_count;
     }
 
 
+    public static final Parcelable.Creator<BandListModel> CREATOR = new Parcelable.Creator<BandListModel> () {
+        @Override
+        public BandListModel createFromParcel(Parcel source) {
+            final BandListModel bandListModel = new BandListModel();
+            bandListModel.setBand_key(source.readString());
+            bandListModel.setCover(source.readString());
+            bandListModel.setName(source.readString());
+            bandListModel.setMember_count(source.readInt());
+            return bandListModel;
+        }
+
+        @Override
+        public BandListModel[] newArray(int size) {
+            return new BandListModel[size];
+        }
+    };
 }

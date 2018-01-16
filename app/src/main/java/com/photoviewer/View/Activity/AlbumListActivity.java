@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -16,12 +15,12 @@ import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
-import com.photoviewer.View.Adapter.AlbumListAdapter;
+import com.photoviewer.View.Adapter.RecyclerItemAdapter;
+import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityAlbumpageBinding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -34,13 +33,15 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
     private static final String TAG = AlbumListActivity.class.getSimpleName();
     private Pref pref = Pref.getInstance();
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
-    private RecyclerView recyclerView;
+    private RecyclerView albumListRecyclerView;
 
     private String bandKey;
+    private RecyclerItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         initDataBinding();
         pref.setContext(this);
         getBandkeyIntent(getIntent());
@@ -64,6 +65,15 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
         }
     };
 
+    public List<BandAlbumModel> parArrayAlbumList() {
+        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandKey, null);
+        Type listType = new TypeToken<ArrayList<BandAlbumModel>>() {
+        }.getType();
+        Gson gson = new Gson();
+        ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);
+        return list;
+    }
+
     public void initDataBinding() {
         setBinding(R.layout.activity_albumpage);
     }
@@ -82,22 +92,28 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
             getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
 
-        recyclerView = getBinding().albumRecyclerview;
-        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 3);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new AlbumListAdapter(parseArrayList(), bandKey));
+        albumListRecyclerView = getBinding().albumRecyclerview;
+        GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 1);
+
+        albumListRecyclerView.setHasFixedSize(true);
+        albumListRecyclerView.setLayoutManager(layoutManager);
+
+        adapter = new RecyclerItemAdapter(getApplicationContext(), albumListListener);
+        albumListRecyclerView.setAdapter(adapter);
+        adapter.setAlbumSetItemList(parArrayAlbumList());
     }
 
-    public List<BandAlbumModel> parseArrayList() {
-        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandKey, null);
-        Type listType = new TypeToken<ArrayList<BandAlbumModel>>() {
-        }.getType();
-        Gson gson = new Gson();
-        ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);
-        Collections.reverse(list);
-        return list;
-    }
+    ClickListener albumListListener = new ClickListener() {
+        @Override
+        public void onItemClick(Object o) {
+            if(o instanceof BandAlbumModel){
+                Intent intent = new Intent(AlbumListActivity.this, PhotoActivity.class);
+                intent.putExtra("band_key", bandKey);
+                intent.putExtra("album_key", ((BandAlbumModel) o).getPhoto_album_key());
+                startActivity(intent);
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {

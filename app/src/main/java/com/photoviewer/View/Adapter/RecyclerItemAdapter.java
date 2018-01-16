@@ -9,20 +9,28 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.photoviewer.BR;
+import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
+import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.ViewModel.AbstractViewModel;
+import com.photoviewer.ViewModel.AlbumListViewModel;
 import com.photoviewer.ViewModel.BandListViewModel;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.ViewModel.BindListViewType;
+import com.photoviewer.ViewModel.PhotoListViewModel;
+import com.photoviewer.databinding.ItemAlbumcardviewBinding;
 import com.photoviewer.databinding.ItemMaincardviewBinding;
+import com.photoviewer.databinding.ItemPhotoviewBinding;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-public class BandListAdapter extends RecyclerView.Adapter<BandListAdapter.BindingViewHolder> {
+public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapter.BindingViewHolder> {
 
     private Context context;
     private ClickListener clickListener;
@@ -30,24 +38,51 @@ public class BandListAdapter extends RecyclerView.Adapter<BandListAdapter.Bindin
 
     private List<AbstractViewModel> itemList = new ArrayList<>();
 
-    public BandListAdapter(Context context, ClickListener clickListener) {
+    public RecyclerItemAdapter(Context context, ClickListener clickListener) {
         this.context = context;
         this.clickListener = clickListener;
     }
 
-    public void parseArrayList() {
+    public List<BandListModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_LIST_KEY, null);
         Type listType = new TypeToken<ArrayList<BandListModel>>() {
         }.getType();
         Gson gson = new Gson();
         ArrayList<BandListModel> list = gson.fromJson(json, listType);
-        setItemList(list);
+        return list;
     }
 
-    private void setItemList(List<BandListModel> bandlist) {
+
+    public void setPhotoItemList(List<BandPhotoModel> bandPhotoModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
 
-        for (BandListModel bandListModel : bandlist) {
+        for (BandPhotoModel bandPhotoModel : bandPhotoModels) {
+            itemList.add(new PhotoListViewModel(bandPhotoModel, clickListener));
+        }
+
+        this.itemList = itemList;
+        notifyDataSetChanged();
+    }
+
+
+    //앨범모델 리스트로 들고있음
+    public void setAlbumSetItemList(List<BandAlbumModel> bandAlbumModels) {
+        List<AbstractViewModel> itemList = new ArrayList<>();
+
+        for (BandAlbumModel bandAlbumModel : bandAlbumModels) {
+            itemList.add(new AlbumListViewModel(bandAlbumModel, clickListener));
+        }
+
+        this.itemList = itemList;
+        notifyDataSetChanged();
+    }
+
+
+    //뷰모델을 리스트로 들고있음
+    public void setItemList(List<BandListModel> bandListModels) {
+        List<AbstractViewModel> itemList = new ArrayList<>();
+
+        for (BandListModel bandListModel : bandListModels) {
             itemList.add(new BandListViewModel(bandListModel, clickListener));
         }
 
@@ -55,11 +90,17 @@ public class BandListAdapter extends RecyclerView.Adapter<BandListAdapter.Bindin
         notifyDataSetChanged();
     }
 
+    //BindingConversion으로 바꿀 것
+
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (BindListViewType.values()[viewType]) {
             case BANDLIST:
                 return new BindingViewHolder<ItemMaincardviewBinding, BandListModel>(ItemMaincardviewBinding.inflate(LayoutInflater.from(context)));
+            case ALBUMLIST:
+                return new BindingViewHolder<ItemAlbumcardviewBinding, BandAlbumModel>(ItemAlbumcardviewBinding.inflate(LayoutInflater.from(context)));
+            case PHOTOLIST:
+                return new BindingViewHolder<ItemPhotoviewBinding, BandPhotoModel>(ItemPhotoviewBinding.inflate(LayoutInflater.from(context)));
             default:
                 return null;
         }

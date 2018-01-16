@@ -1,6 +1,7 @@
 package com.photoviewer.View.Activity;
 
 import android.content.Intent;
+import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -14,12 +15,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.PhotoListAdapter;
+import com.photoviewer.View.Adapter.RecyclerItemAdapter;
+import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityPhotopageBinding;
 
 import java.lang.reflect.Type;
@@ -39,7 +43,7 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
     private RecyclerView recyclerView;
-
+    private RecyclerItemAdapter adapter;
     private String albumKey;
     private String bandKey;
 
@@ -81,9 +85,21 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-
-        recyclerView.setAdapter(new PhotoListAdapter(parseArrayList(), albumKey));
+        adapter = new RecyclerItemAdapter(getApplicationContext(), photolistListinener);
+        recyclerView.setAdapter(adapter);
+        adapter.setPhotoItemList(parseArrayList());
     }
+
+    ClickListener photolistListinener = new ClickListener() {
+        @Override
+        public void onItemClick(Object o) {
+            if(o instanceof BandPhotoModel){
+                Intent intent = new Intent(PhotoActivity.this, PhotoDetailActivity.class);
+                intent.putExtra("photo_key",((BandPhotoModel) o).getPhoto_key());
+                startActivity(intent);
+            }
+        }
+    };
 
     public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);

@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
-import com.photoviewer.View.Adapter.BandListAdapter;
+import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityMainBinding;
 
@@ -20,7 +21,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView bandListRecyclerview;
-    private BandListAdapter adapter;
+    private RecyclerItemAdapter adapter;
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
@@ -57,17 +58,19 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         bandListRecyclerview.setHasFixedSize(true);
         bandListRecyclerview.setLayoutManager(layoutManager);
 
-        adapter = new BandListAdapter(getApplicationContext(), bandlistlistener);
+        adapter = new RecyclerItemAdapter(getApplicationContext(), bandListListener);
         bandListRecyclerview.setAdapter(adapter);
-        adapter.parseArrayList();
+        adapter.setItemList(adapter.parseArrayList());
     }
 
-    ClickListener bandlistlistener = new ClickListener() {
+    ClickListener bandListListener = new ClickListener() {
         @Override
-        public void onItemClick(BandListModel bandListModel) {
-            Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
-            intent.putExtra("band_key", bandListModel.getBand_key());
-            startActivity(intent);
+        public void onItemClick(Object o) {
+            if(o instanceof BandListModel){
+                Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
+                intent.putExtra("band_key", ((BandListModel) o).getBand_key());
+                startActivity(intent);
+            }
         }
     };
 

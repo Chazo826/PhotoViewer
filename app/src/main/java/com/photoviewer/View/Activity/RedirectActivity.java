@@ -36,8 +36,10 @@ public class RedirectActivity extends BaseActivity {
     private void handleIntent(Intent intent) {
         String appLinkAction = intent.getAction();
         Uri appLinkData = intent.getData();
+
         startActivity(new Intent(appLinkAction, appLinkData));
         getRedirectResultInfo(appLinkData);
+
         finish();
     }
 

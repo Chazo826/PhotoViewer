@@ -1,5 +1,8 @@
 package com.photoviewer.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,22 +11,48 @@ import java.io.Serializable;
  * Created by user on 2017. 12. 20..
  */
 
-public class BandPhotoModel implements Serializable {
+public class BandPhotoModel implements Parcelable {
 
-    @SerializedName("photo_key")
     private String photo_key;   //사진 식별자
-
-    @SerializedName("url")
     private String url; //사진 URL
-
-    @SerializedName("width")
     private int width;  //사진 넓이
-
-    @SerializedName("height")
     private int height; //사진 높이
+    private long created_at;    //생성 일시
 
-    @SerializedName("created_at")
-    private Long created_at;    //생성 일시
+    public BandPhotoModel(){}
+
+    public BandPhotoModel(Parcel in){
+        readInParcel(in);
+    }
+
+    public BandPhotoModel(String photo_key, String url, int width, int height, long created_at) {
+        this.photo_key = photo_key;
+        this.url = url;
+        this.width = width;
+        this.height = height;
+        this.created_at = created_at;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public void readInParcel(Parcel in){
+        photo_key = in.readString();
+        url = in.readString();
+        width = in.readInt();
+        height = in.readInt();
+        created_at = in.readLong();
+    }
+
+    public void writeToParcel(Parcel dest, int flag){
+        dest.writeString(photo_key);
+        dest.writeString(url);
+        dest.writeInt(width);
+        dest.writeInt(height);
+        dest.writeLong(created_at);
+    }
 
     public String getPhoto_key() {
         return photo_key;
@@ -57,11 +86,30 @@ public class BandPhotoModel implements Serializable {
         this.height = height;
     }
 
-    public Long getCreated_at() {
+    public long getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Long created_at) {
+    public void setCreated_at(long created_at) {
         this.created_at = created_at;
     }
+
+    public static final Parcelable.Creator<BandPhotoModel> CREATOR = new Parcelable.Creator<BandPhotoModel>(){
+
+        @Override
+        public BandPhotoModel createFromParcel(Parcel source) {
+            final BandPhotoModel bandPhotoModel = new BandPhotoModel();
+            bandPhotoModel.setPhoto_key(source.readString());
+            bandPhotoModel.setUrl(source.readString());
+            bandPhotoModel.setHeight(source.readInt());
+            bandPhotoModel.setWidth(source.readInt());
+            bandPhotoModel.setCreated_at(source.readLong());
+            return bandPhotoModel;
+        }
+
+        @Override
+        public BandPhotoModel[] newArray(int size) {
+            return new BandPhotoModel[size];
+        }
+    };
 }
