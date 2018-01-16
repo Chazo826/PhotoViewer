@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.photoviewer.Model.AbstractModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
@@ -14,6 +15,8 @@ import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityMainBinding;
+
+import java.util.List;
 
 import io.reactivex.functions.Consumer;
 

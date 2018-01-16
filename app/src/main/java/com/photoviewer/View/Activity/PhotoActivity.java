@@ -1,35 +1,25 @@
 package com.photoviewer.View.Activity;
 
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.photoviewer.Model.BandAlbumModel;
-import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
-import com.photoviewer.View.Adapter.PhotoListAdapter;
 import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityPhotopageBinding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
@@ -86,18 +76,17 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerItemAdapter(getApplicationContext(), photolistListinener);
+        adapter = new RecyclerItemAdapter(getApplicationContext(), photoListListener);
         recyclerView.setAdapter(adapter);
         adapter.setPhotoItemList(parseArrayList());
     }
 
-    ClickListener photolistListinener = new ClickListener() {
+    ClickListener photoListListener = new ClickListener() {
         @Override
         public void onItemClick(Object o) {
             if (o instanceof BandPhotoModel) {
                 Intent intent = new Intent(PhotoActivity.this, PhotoDetailActivity.class);
-                intent.putExtra("photo_key", ((BandPhotoModel) o).getPhoto_key());
-                intent.putExtra("url", ((BandPhotoModel) o).getUrl());
+                intent.putExtra("album_key", albumKey);
                 startActivity(intent);
             }
         }

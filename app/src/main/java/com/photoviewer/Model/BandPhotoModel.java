@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.photoviewer.ViewModel.AbstractViewModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by user on 2017. 12. 20..
  */
 
-public class BandPhotoModel implements Parcelable {
+public class BandPhotoModel extends AbstractModel implements Parcelable {
 
     private String photo_key;   //사진 식별자
     private String url; //사진 URL

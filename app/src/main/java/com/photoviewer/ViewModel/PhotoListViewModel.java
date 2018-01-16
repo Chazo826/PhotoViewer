@@ -4,6 +4,7 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.photoviewer.Model.BandPhotoModel;
 
 /**
@@ -51,5 +52,10 @@ public class PhotoListViewModel extends AbstractViewModel {
     @BindingAdapter("bind:imageUrl")
     public static void setPhotoUrl(ImageView imageView, String imageUrl) {
         Glide.with(imageView.getContext()).load(imageUrl).into(imageView);
+    }
+
+    @BindingAdapter("bind:testUrl")
+    public static void setTestUrl(PhotoView photoView, String url){
+        Glide.with(photoView.getContext()).load(url).into(photoView);
     }
 }

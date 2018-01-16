@@ -6,9 +6,12 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.photoviewer.Model.AbstractModel;
+import com.photoviewer.Model.BandListModel;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -62,6 +65,15 @@ public class Pref {
         }
         return gson.fromJson(json, klass);
     }
+
+//    public List<? extends AbstractModel> parseArrayList(String key) {
+//        String json = pref.getString(key, null);
+//        Type listType = new TypeToken<ArrayList<? extends AbstractModel>>() {
+//        }.getType();
+//        Gson gson = new Gson();
+//        ArrayList<? extends AbstractModel> list = gson.fromJson(json, listType);
+//        return list;
+//    }
 
     public void putString(String key, String val){
         SharedPreferences.Editor editor = sharedPreferences.edit();

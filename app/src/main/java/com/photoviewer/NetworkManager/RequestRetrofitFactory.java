@@ -13,6 +13,7 @@ import com.photoviewer.Utils.Pref;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -32,14 +33,14 @@ public class RequestRetrofitFactory {
 
     private Pref pref = Pref.getInstance();
 
-    public void getRequestRetrofit(String received_authorization_code, Consumer<AuthorizationInfo> consumer) {
-        mCompositeDisposable.add(
-                tokenService.getAuthCodeForLogin(received_authorization_code,
+    public CompositeDisposable getCompositeDisposable(){
+        return mCompositeDisposable;
+    }
+    public Single<AuthorizationInfo> getRequestRetrofit(String received_authorization_code) {
+        return tokenService.getAuthCodeForLogin(received_authorization_code,
                         ApiFactory.getInstance().getBase64Encode())
                         .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(consumer));
-
+                        .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void getBandListRetrofit(Consumer<JsonObject> consumer) {
@@ -83,11 +84,6 @@ public class RequestRetrofitFactory {
     private String deliverAccessToken() {
         AuthorizationInfo authorizationInfo = pref.getObject(Pref.ACCESS_TOKEN_KEY, null, AuthorizationInfo.class);
         return authorizationInfo.getAccess_token();
-    }
-
-    private String delieverBandKey(){
-        BandListModel bandListModel = pref.getObject(Pref.BAND_LIST_KEY, null, BandListModel.class);
-        return bandListModel.getBand_key();
     }
 
 }

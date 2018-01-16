@@ -13,8 +13,8 @@ import com.photoviewer.Model.BandPhotoModel;
 public class PhotoDetailViewModel extends AbstractViewModel {
     private BandPhotoModel bandPhotoModel;
 
-    public PhotoDetailViewModel(BandPhotoModel bandPhotoModel, ClickListener clickListener) {
-        super(clickListener);
+    public PhotoDetailViewModel(BandPhotoModel bandPhotoModel) {
+        super();
         this.bandPhotoModel = bandPhotoModel;
     }
 

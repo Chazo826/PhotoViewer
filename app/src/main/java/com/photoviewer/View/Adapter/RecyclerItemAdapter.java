@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.photoviewer.BR;
+import com.photoviewer.Model.AbstractModel;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
@@ -52,11 +53,13 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         return list;
     }
 
-    public void setPhotoItemList(List<BandPhotoModel> bandPhotoModels) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
 
-        for (BandPhotoModel bandPhotoModel : bandPhotoModels) {
-            itemList.add(new PhotoListViewModel(bandPhotoModel, clickListener));
+    public void setPhotoItemList(List<? extends AbstractModel> models) {
+        List<AbstractViewModel> itemList = new ArrayList<>();
+        if(models.get(0) instanceof BandPhotoModel){
+            for (AbstractModel model : models) {
+                itemList.add(new PhotoListViewModel((BandPhotoModel)model, clickListener));
+            }
         }
 
         this.itemList = itemList;

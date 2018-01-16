@@ -10,6 +10,7 @@ import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.Utils.Pref;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 
 import static android.content.ContentValues.TAG;
@@ -46,7 +47,9 @@ public class RedirectActivity extends BaseActivity {
     private void getRedirectResultInfo(Uri uri){
         String auth_token = uri.getQueryParameter("code");
         if (auth_token != null) {
-            requestRetrofitFactory.getRequestRetrofit(auth_token,consumer);
+            requestRetrofitFactory.getCompositeDisposable().add(
+                    requestRetrofitFactory.getRequestRetrofit(auth_token)
+                    .subscribe(consumer));
         } else {
             startActivity(new Intent(RedirectActivity.this, LoginActivity.class));
             finish();

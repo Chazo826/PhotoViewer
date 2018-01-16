@@ -2,25 +2,30 @@ package com.photoviewer.View.Activity;
 
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
+import com.photoviewer.ViewModel.ClickListener;
+import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoDetailBinding;
-import com.photoviewer.databinding.ActivityPhotopageBinding;
+import com.photoviewer.databinding.ItemPhotodetailBinding;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,39 +33,55 @@ import java.util.List;
  * Created by user on 2018. 1. 14..
  */
 
-public class PhotoDetailActivity extends BaseActivity {
+public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding> {
     private static final String TAG = PhotoDetailActivity.class.getSimpleName();
 
-    //클릭한 포토키가지고 첫화면
-    //현재 앨범에 전체 포토키 가지고 있어야함
-    //스와이프되면 다음키로 증가
-
-    private PhotoViewAttacher photoViewAttacher;
     private ViewPager viewPager;
-
+    private PhotoPagerAdapter photoPagerAdapter;
+    protected BandPhotoModel bandPhotoModel;
+    private String albumKey;
+    private List<BandPhotoModel> bandPhotoModelList = new ArrayList<>();
+    private Pref pref = Pref.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_detail);
-
+        initDataBinding();
+        getIntentData(getIntent());
         initView();
     }
 
-    public void initView() {
 
+    public void getIntentData(Intent intent){
+        albumKey = intent.getStringExtra("album_key");
     }
 
-    public static class PagerAdapter extends android.support.v4.view.PagerAdapter {
-        List<BandAlbumModel> urlList = new ArrayList<>();
+    public void initDataBinding() {
+        setBinding(R.layout.activity_photo_detail);
+    }
 
-        public List<BandAlbumModel> getUrlList() {
-            return urlList;
-        }
+    public void initView() {
+        viewPager = getBinding().detailViewPager;
+        bandPhotoModelList = parseArrayList();
+
+        photoPagerAdapter = new PhotoPagerAdapter();
+        viewPager.setAdapter(photoPagerAdapter);
+    }
+
+    public List<BandPhotoModel> parseArrayList() {
+        String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
+        Type listType = new TypeToken<ArrayList<BandPhotoModel>>() {
+        }.getType();
+        Gson gson = new Gson();
+        ArrayList<BandPhotoModel> list = gson.fromJson(json, listType);
+        return list;
+    }
+
+    public class PhotoPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return 0;
+            return bandPhotoModelList.size();
         }
 
         @Override
@@ -71,10 +92,15 @@ public class PhotoDetailActivity extends BaseActivity {
         @NonNull
         @Override
         public View instantiateItem(@NonNull ViewGroup container, int position) {
-            PhotoView photoView = new PhotoView(container.getContext());
-            //photoView.setImageResource(리스트[position]);
-            container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            return photoView;
+            ItemPhotodetailBinding itemPhotodetailBinding = DataBindingUtil
+                    .inflate(LayoutInflater.from(container.getContext()),
+                            R.layout.item_photodetail,
+                            container,
+                            false);
+
+            itemPhotodetailBinding.setViewModel(new PhotoDetailViewModel(bandPhotoModelList.get(position)));
+            container.addView(itemPhotodetailBinding.getRoot());
+            return itemPhotodetailBinding.getRoot();
         }
 
 
