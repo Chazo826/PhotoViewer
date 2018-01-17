@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -34,8 +35,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBinding(R.layout.activity_main);
 
-        initBinding();
         pref.setContext(this);
         requestRetrofitFactory.getBandListRetrofit(consumer);
     }
@@ -53,11 +54,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         }
     };
 
-    public void initBinding() {
-        setBinding(R.layout.activity_main);
-    }
-
     public void initView() {
+        getBinding().mainTitle.setText(R.string.main_toolbar_name);
         bandListRecyclerview = getBinding().bandListRecyclerview;
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         bandListRecyclerview.setHasFixedSize(true);
@@ -70,10 +68,16 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     ClickListener bandListListener = new ClickListener() {
         @Override
+        public void onClick() {
+
+        }
+
+        @Override
         public void onItemClick(Object o) {
             if(o instanceof BandListModel){
                 Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
                 intent.putExtra("band_key", ((BandListModel) o).getBand_key());
+                intent.putExtra("name",((BandListModel) o).getName());
                 startActivity(intent);
             }
         }

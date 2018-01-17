@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -36,19 +38,23 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
     private RecyclerView albumListRecyclerView;
 
     private String bandKey;
+    private String bandName;
+
     private RecyclerItemAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setBinding(R.layout.activity_albumpage);
 
-        initDataBinding();
         pref.setContext(this);
         getBandkeyIntent(getIntent());
     }
 
     public void getBandkeyIntent(Intent intent) {
         bandKey = intent.getStringExtra("band_key");
+        bandName = intent.getStringExtra("name");
+
         requestRetrofitFactory.getBandAlbumList(consumer, bandKey);
     }
 
@@ -74,25 +80,12 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
         return list;
     }
 
-    public void initDataBinding() {
-        setBinding(R.layout.activity_albumpage);
-    }
-
     public void initView() {
-        getBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
-        getBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-        }
+        setToolbar();
 
         albumListRecyclerView = getBinding().albumRecyclerview;
+        getBinding().albumListTitle.setText(R.string.main_album_title);
+        getBinding().bandName.setText(bandName);
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 1);
 
         albumListRecyclerView.setHasFixedSize(true);
@@ -103,10 +96,37 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
         adapter.setAlbumItemList(parArrayAlbumList());
     }
 
+    public void setToolbar(){
+        getBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        getBinding().albumSlideBtn.setVisibility(View.VISIBLE);
+
+        getBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+    }
+
     ClickListener albumListListener = new ClickListener() {
+
+        BandAlbumModel bandAlbumModel;
+
+        @Override
+        public void onClick() {
+            Intent intent = new Intent(AlbumListActivity.this, PhotoDetailActivity.class);
+            intent.putExtra("album_key", pref.getString(Pref.BAND_ALBUM_KEY, bandAlbumModel.getPhoto_album_key()));
+            startActivity(intent);
+        }
+
         @Override
         public void onItemClick(Object o) {
-            if(o instanceof BandAlbumModel){
+            if (o instanceof BandAlbumModel) {
                 Intent intent = new Intent(AlbumListActivity.this, PhotoActivity.class);
                 intent.putExtra("band_key", bandKey);
                 intent.putExtra("album_key", ((BandAlbumModel) o).getPhoto_album_key());
@@ -114,6 +134,7 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
             }
         }
     };
+
 
     @Override
     protected void onDestroy() {

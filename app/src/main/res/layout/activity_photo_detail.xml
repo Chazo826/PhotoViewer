@@ -9,7 +9,7 @@
         <variable name="viewModel" type="com.photoviewer.ViewModel.PhotoDetailViewModel" />
     </data>
 
-    <com.photoviewer.View.HackeyViewPager
+    <com.photoviewer.View.Adapter.HackeyViewPager
         android:id="@+id/detail_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

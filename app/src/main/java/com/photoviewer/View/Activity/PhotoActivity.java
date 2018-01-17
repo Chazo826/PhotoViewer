@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -95,6 +92,12 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
     }
 
     ClickListener photoListListener = new ClickListener() {
+
+        @Override
+        public void onClick() {
+
+        }
+
         @Override
         public void onItemClick(Object o) {
             if (o instanceof BandPhotoModel) {

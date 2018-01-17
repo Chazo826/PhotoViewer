@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BandPhotoViewer</string>
 
+    <string name="main_toolbar_name">Band.</string>
+    <string name="main_album_title">Album.</string>
+
     <string name="login_title">Log in</string>
     <string name="login_btn">Using Band account</string>
 

@@ -13,22 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.AutoSlideListener;
-import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoDetailBinding;
 import com.photoviewer.databinding.ItemPhotodetailBinding;
 
 import java.lang.reflect.Type;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -43,7 +38,6 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
 
     private ViewPager viewPager;
     private PhotoPagerAdapter photoPagerAdapter;
-    protected BandPhotoModel bandPhotoModel;
     private String albumKey;
     private int currentPage = 0;
 
@@ -77,6 +71,7 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
         viewPager.addOnPageChangeListener(new AutoSlideListener());
         setAutoPager();
     }
+
 
     public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
@@ -124,13 +119,13 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
         }
     }
 
-    private void setAutoPager(){
+    private void setAutoPager() {
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 viewPager.setCurrentItem(currentPage, true);
-                if(currentPage == bandPhotoModelList.size()){
+                if (currentPage == bandPhotoModelList.size()) {
                     currentPage = 0;
                 } else {
                     ++currentPage;
@@ -143,6 +138,6 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
             public void run() {
                 handler.post(runnable);
             }
-        }, 800, 3000);
+        }, 1500, 1200);
     }
 }

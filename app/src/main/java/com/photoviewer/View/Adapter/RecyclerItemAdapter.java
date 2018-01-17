@@ -27,6 +27,7 @@ import com.photoviewer.databinding.ItemPhotoviewBinding;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +62,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
                 itemList.add(new PhotoListViewModel((BandPhotoModel)model, clickListener));
             }
         }
-
         this.itemList = itemList;
         notifyDataSetChanged();
     }
@@ -76,8 +76,10 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         }
 
         this.itemList = itemList;
+        Collections.reverse(itemList);
         notifyDataSetChanged();
     }
+
 
 
     //뷰모델을 리스트로 들고있음
