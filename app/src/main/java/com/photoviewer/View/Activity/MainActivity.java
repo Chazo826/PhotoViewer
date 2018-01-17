@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -25,6 +26,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private RecyclerView bandListRecyclerview;
     private RecyclerItemAdapter adapter;
+    private Toolbar toolbar;
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();

@@ -8,6 +8,6 @@ import com.photoviewer.Model.BandListModel;
 
 public interface ClickListener {
 
-    void onItemClick(Object o);
+    void onItemClick(Object object);
 
 }

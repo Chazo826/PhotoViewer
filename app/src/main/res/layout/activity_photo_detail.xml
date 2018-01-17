@@ -6,7 +6,7 @@
         <import type="android.view.View" />
         <import type="com.github.chrisbanes.photoview.PhotoView"/>
 
-        <variable name="viewModel" type="com.photoviewer.ViewModel.PhotoListViewModel" />
+        <variable name="viewModel" type="com.photoviewer.ViewModel.PhotoDetailViewModel" />
     </data>
 
     <com.photoviewer.View.HackeyViewPager

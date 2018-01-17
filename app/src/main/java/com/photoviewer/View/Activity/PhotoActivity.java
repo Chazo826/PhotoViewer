@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,7 +19,7 @@ import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
-import com.photoviewer.databinding.ActivityPhotopageBinding;
+import com.photoviewer.databinding.ActivityPhotoBinding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ import io.reactivex.functions.Consumer;
  * Created by user on 2017. 12. 20..
  */
 
-public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
+public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
     private static final String TAG = PhotoActivity.class.getSimpleName();
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
@@ -50,7 +53,6 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
     public void getAlbumKeyIntent(Intent intent) {
         bandKey = intent.getStringExtra("band_key");
         albumKey = intent.getStringExtra("album_key");
-
         requestRetrofitFactory.getBandPhotoList(consumer, bandKey, albumKey);
     }
 
@@ -58,24 +60,35 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
             int result = jsonObject.get("result_code").getAsInt();
+
             if (result == 1) {
-                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                        .get("items").getAsJsonArray();
-                pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
-                initView();
-            }
+//                JsonObject paging = jsonObject.get("paging").getAsJsonObject()
+//                        .get("next_params").getAsJsonObject();
+//                String afterparams = paging.get("atfer").getAsString();
+//
+//                if(afterparams != null){
+//                    //post로 request해서 받아야함
+//                } else {
+                    JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                            .get("items").getAsJsonArray();
+                    pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
+                    initView();
+                }
+//            }
         }
     };
 
     public void initDataBinding() {
-        setBinding(R.layout.activity_photopage);
+        setBinding(R.layout.activity_photo);
     }
 
     public void initView() {
         recyclerView = getBinding().photoRecyclerview;
+
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+
         adapter = new RecyclerItemAdapter(getApplicationContext(), photoListListener);
         recyclerView.setAdapter(adapter);
         adapter.setPhotoItemList(parseArrayList());
@@ -101,6 +114,7 @@ public class PhotoActivity extends BaseActivity<ActivityPhotopageBinding> {
         ArrayList<BandPhotoModel> list = gson.fromJson(json, listType);
         return list;
     }
+
 
     @Override
     protected void onDestroy() {

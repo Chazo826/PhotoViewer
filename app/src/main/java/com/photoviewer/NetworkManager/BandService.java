@@ -5,8 +5,11 @@ import com.photoviewer.Model.AuthorizationInfo;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -28,4 +31,9 @@ public interface BandService {
     @GET("v2/band/album/photos")
     Single<JsonObject> getUserBandsPhotos(@Query("access_token") String accessToken, @Query("band_key") String bandKey, @Query("photo_album_key") String photoAlbumKey);
 
+    @FormUrlEncoded
+    @POST("v2/band/posts")
+    Observable<JsonObject> getNextParams(@Field("after") String after, @Field("limit") int limit,
+                                         @Field("band_key") String bandKey, @Field("access_token") String accessToken,
+                                         @Field("locale") String locale);
 }

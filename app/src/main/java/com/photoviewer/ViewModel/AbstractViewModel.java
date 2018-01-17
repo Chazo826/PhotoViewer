@@ -7,7 +7,10 @@ package com.photoviewer.ViewModel;
 abstract public class AbstractViewModel {
 
     protected ClickListener clickListener;
-    public AbstractViewModel(){}
+
+    public AbstractViewModel() {
+    }
+
     public AbstractViewModel(ClickListener clickListener) {
         this.clickListener = clickListener;
     }

@@ -4,6 +4,7 @@ package com.photoviewer.View.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -20,14 +21,18 @@ import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
+import com.photoviewer.View.Adapter.AutoSlideListener;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoDetailBinding;
 import com.photoviewer.databinding.ItemPhotodetailBinding;
 
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by user on 2018. 1. 14..
@@ -40,6 +45,8 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
     private PhotoPagerAdapter photoPagerAdapter;
     protected BandPhotoModel bandPhotoModel;
     private String albumKey;
+    private int currentPage = 0;
+
     private List<BandPhotoModel> bandPhotoModelList = new ArrayList<>();
     private Pref pref = Pref.getInstance();
 
@@ -52,7 +59,7 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
     }
 
 
-    public void getIntentData(Intent intent){
+    public void getIntentData(Intent intent) {
         albumKey = intent.getStringExtra("album_key");
     }
 
@@ -66,6 +73,9 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
 
         photoPagerAdapter = new PhotoPagerAdapter();
         viewPager.setAdapter(photoPagerAdapter);
+
+        viewPager.addOnPageChangeListener(new AutoSlideListener());
+        setAutoPager();
     }
 
     public List<BandPhotoModel> parseArrayList() {
@@ -103,11 +113,36 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
             return itemPhotodetailBinding.getRoot();
         }
 
-
         @Override
         public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
             return view == object;
         }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
     }
 
+    private void setAutoPager(){
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(currentPage, true);
+                if(currentPage == bandPhotoModelList.size()){
+                    currentPage = 0;
+                } else {
+                    ++currentPage;
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnable);
+            }
+        }, 800, 3000);
+    }
 }

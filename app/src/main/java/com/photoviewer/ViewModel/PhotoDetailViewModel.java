@@ -11,6 +11,7 @@ import com.photoviewer.Model.BandPhotoModel;
  */
 
 public class PhotoDetailViewModel extends AbstractViewModel {
+
     private BandPhotoModel bandPhotoModel;
 
     public PhotoDetailViewModel(BandPhotoModel bandPhotoModel) {

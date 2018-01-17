@@ -1,6 +1,8 @@
 package com.photoviewer.ViewModel;
 
 import android.databinding.BindingAdapter;
+import android.media.Image;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +58,11 @@ public class PhotoListViewModel extends AbstractViewModel {
 
     @BindingAdapter("bind:testUrl")
     public static void setTestUrl(PhotoView photoView, String url){
+        Glide.with(photoView.getContext()).load(url).into(photoView);
+    }
+
+    @BindingAdapter("bind:startSlideOption")
+    public void startSlideOption(ImageView photoView, String url){
         Glide.with(photoView.getContext()).load(url).into(photoView);
     }
 }

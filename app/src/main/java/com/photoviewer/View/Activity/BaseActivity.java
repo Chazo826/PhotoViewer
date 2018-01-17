@@ -8,9 +8,11 @@ import android.provider.ContactsContract;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 
 import com.photoviewer.Model.BandPhotoModel;
+import com.photoviewer.R;
 import com.photoviewer.ViewModel.ClickListener;
 
 /**
@@ -36,6 +38,7 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
+
     }
 
 }
