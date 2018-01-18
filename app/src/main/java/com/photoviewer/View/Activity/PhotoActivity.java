@@ -61,16 +61,15 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
             int result = jsonObject.get("result_code").getAsInt();
-
             if (result == 1) {
-                JsonObject test = jsonObject.get("result_data").getAsJsonObject()
-                        .get("paging").getAsJsonObject();
-                if (test.has("next_params")) {
-                    String afterValue = test.get("next_params").getAsJsonObject().get("after").getAsString();
-                   if(!afterValue.contains("null")){
-                       requestRetrofitFactory.getNextParams(consumer, afterValue, bandKey);
-                   }
-                }
+//                JsonObject test = jsonObject.get("result_data").getAsJsonObject()
+//                        .get("paging").getAsJsonObject();
+//                if (test.has("next_params")) {
+//                    String afterValue = test.get("next_params").getAsJsonObject().get("after").getAsString();
+//                   if(!afterValue.contains("null")){
+//                       requestRetrofitFactory.getNextParams(consumer, afterValue, bandKey);
+//                   }
+//                }
                 JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                         .get("items").getAsJsonArray();
                 pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());

@@ -48,6 +48,7 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
     private String bandName;
 
     private RecyclerItemAdapter adapter;
+    private String albumKey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,9 +77,9 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
                 pref.putString(Pref.BAND_ALBUM_KEY + bandKey, jsonArray.toString());
                 initView();
             }
-            JsonObject test = jsonObject.get("result_data").getAsJsonObject()
-                    .get("paging").getAsJsonObject();
-            Log.d(TAG+"테스트", test.toString());
+//            JsonObject test = jsonObject.get("result_data").getAsJsonObject()
+//                    .get("paging").getAsJsonObject();
+//            Log.d(TAG+"테스트", test.toString());
         }
     };
 
@@ -131,6 +132,7 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
             Intent intent = new Intent(AlbumListActivity.this, PhotoActivity.class);
             intent.putExtra("band_key", bandKey);
             intent.putExtra("album_key", ((BandAlbumModel) object).getPhoto_album_key());
+            pref.putString(Pref.BAND_ALBUM_KEY, ((BandAlbumModel) object).getPhoto_album_key());
             startActivity(intent);
         }
     };
@@ -146,10 +148,13 @@ public class AlbumListActivity extends BaseActivity<ActivityAlbumpageBinding> {
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             if (direction == ItemTouchHelper.RIGHT) {
-                Intent intent = new Intent(AlbumListActivity.this, PhotoActivity.class);
-                intent.putExtra("band_key", bandKey);
-                intent.putExtra("album_key", bandAlbumModel.getPhoto_album_key());
-                startActivity(intent);
+                requestRetrofitFactory.getBandPhotoList(consumer, bandKey, pref.getString(Pref.BAND_ALBUM_KEY, bandAlbumModel.getPhoto_album_key()));
+
+//                Intent intent = new Intent(AlbumListActivity.this, PhotoDetailActivity.class);
+//                intent.putExtra("band_key", bandKey);
+//                intent.putExtra("album_key", pref.getString(Pref.BAND_ALBUM_KEY, bandAlbumModel.getPhoto_album_key()));
+//
+//                startActivity(intent);
             }
         }
 

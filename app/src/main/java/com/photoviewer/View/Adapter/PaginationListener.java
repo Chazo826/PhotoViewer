@@ -1,5 +1,6 @@
 package com.photoviewer.View.Adapter;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -9,9 +10,9 @@ import android.support.v7.widget.RecyclerView;
 
 public abstract class PaginationListener extends RecyclerView.OnScrollListener {
 
-    LinearLayoutManager layoutManager;
+    GridLayoutManager layoutManager;
 
-    public PaginationListener(LinearLayoutManager layoutManager) {
+    public PaginationListener(GridLayoutManager layoutManager) {
         this.layoutManager = layoutManager;
     }
 
