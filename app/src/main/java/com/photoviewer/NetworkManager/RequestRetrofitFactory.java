@@ -69,8 +69,8 @@ public class RequestRetrofitFactory {
                         .subscribe(consumer));
     }
 
-    public void getNextParams(Consumer<JsonObject> consumer, String bandKey){
-        mCompositeDisposable.add(bandService.getNextParams(bandKey, deliverAccessToken())
+    public void getNextParams(Consumer<JsonObject> consumer,String after, String bandKey){
+        mCompositeDisposable.add(bandService.getNextParams(bandKey, after, deliverAccessToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(consumer));

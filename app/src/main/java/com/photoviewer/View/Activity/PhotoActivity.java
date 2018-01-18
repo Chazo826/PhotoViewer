@@ -66,9 +66,9 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
                 JsonObject test = jsonObject.get("result_data").getAsJsonObject()
                         .get("paging").getAsJsonObject();
                 if (test.has("next_params")) {
-                    String object = test.get("next_params").getAsJsonObject().get("after").getAsString();
-                   if(!object.contains("null")){
-                       requestRetrofitFactory.getNextParams(consumer, bandKey);
+                    String afterValue = test.get("next_params").getAsJsonObject().get("after").getAsString();
+                   if(!afterValue.contains("null")){
+                       requestRetrofitFactory.getNextParams(consumer, afterValue, bandKey);
                    }
                 }
                 JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
