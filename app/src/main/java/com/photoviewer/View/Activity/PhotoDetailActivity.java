@@ -68,7 +68,6 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
         photoPagerAdapter = new PhotoPagerAdapter();
         viewPager.setAdapter(photoPagerAdapter);
 
-        viewPager.addOnPageChangeListener(new AutoSlideListener());
         setAutoPager();
     }
 
@@ -138,6 +137,6 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
             public void run() {
                 handler.post(runnable);
             }
-        }, 1500, 1200);
+        }, 1500, 2000);
     }
 }

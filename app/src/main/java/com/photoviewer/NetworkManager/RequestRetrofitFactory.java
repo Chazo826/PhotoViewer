@@ -69,6 +69,13 @@ public class RequestRetrofitFactory {
                         .subscribe(consumer));
     }
 
+    public void getNextParams(Consumer<JsonObject> consumer, String bandKey){
+        mCompositeDisposable.add(bandService.getNextParams(bandKey, deliverAccessToken())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer));
+    }
+
     public void saveJsonToPref(Object modelObject) {
         if (modelObject != null) {
             if (modelObject instanceof AuthorizationInfo) {
@@ -81,7 +88,7 @@ public class RequestRetrofitFactory {
         }
     }
 
-    private String deliverAccessToken() {
+    public String deliverAccessToken() {
         AuthorizationInfo authorizationInfo = pref.getObject(Pref.ACCESS_TOKEN_KEY, null, AuthorizationInfo.class);
         return authorizationInfo.getAccess_token();
     }

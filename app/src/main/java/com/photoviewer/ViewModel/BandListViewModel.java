@@ -5,7 +5,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.photoviewer.Model.BandListModel;
-import com.photoviewer.Utils.Pref;
 
 /**
  * 여기서는 모델데이터 가지고 룰루랄라해야함

@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -37,6 +40,7 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
     private RecyclerItemAdapter adapter;
     private String albumKey;
     private String bandKey;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,19 +63,20 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
             int result = jsonObject.get("result_code").getAsInt();
 
             if (result == 1) {
-//                JsonObject paging = jsonObject.get("paging").getAsJsonObject()
-//                        .get("next_params").getAsJsonObject();
-//                String afterparams = paging.get("atfer").getAsString();
-//
-//                if(afterparams != null){
-//                    //post로 request해서 받아야함
-//                } else {
-                    JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                            .get("items").getAsJsonArray();
-                    pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
-                    initView();
+                JsonObject test = jsonObject.get("result_data").getAsJsonObject()
+                        .get("paging").getAsJsonObject();
+                if (test.has("next_params")) {
+                    String object = test.get("next_params").getAsJsonObject().get("after").getAsString();
+                   if(!object.contains("null")){
+                       requestRetrofitFactory.getNextParams(consumer, bandKey);
+                   }
                 }
-//            }
+                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
+                        .get("items").getAsJsonArray();
+                pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
+                initView();
+            }
+
         }
     };
 
@@ -89,14 +94,36 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
         adapter = new RecyclerItemAdapter(getApplicationContext(), photoListListener);
         recyclerView.setAdapter(adapter);
         adapter.setPhotoItemList(parseArrayList());
+
+        setToolbar();
+
+    }
+
+    public void setToolbar() {
+        getBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        getBinding().albumSlideBtn.setVisibility(View.VISIBLE);
+        getBinding().albumSlideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //슬라이드 쇼 실행
+
+            }
+        });
+
+        getBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     ClickListener photoListListener = new ClickListener() {
-
-        @Override
-        public void onClick() {
-
-        }
 
         @Override
         public void onItemClick(Object o) {

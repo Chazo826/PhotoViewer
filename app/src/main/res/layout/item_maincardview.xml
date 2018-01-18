@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,18 +13,21 @@
             type="com.photoviewer.ViewModel.BandListViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.balysv.materialripple.MaterialRippleLayout
+        android:id="@+id/ripple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:mrl_rippleColor="#78909C">
+
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/item_border_layout"
+            android:onClick="@{() -> viewModel.onItemClick()}"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            android:onClick="@{() -> viewModel.onItemClick()}">
+            app:cardElevation="0dp">
 
             <LinearLayout
                 style="@style/Widget.CardContent"
@@ -43,14 +46,14 @@
                     android:id="@+id/bandNameTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.name}"
                     android:layout_marginTop="5dp"
+                    android:text="@{viewModel.name}"
                     android:textAppearance="@style/Font"
                     android:textColor="#333333"
                     android:textSize="12sp" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-    </FrameLayout>
+    </com.balysv.materialripple.MaterialRippleLayout>
 
 </layout>

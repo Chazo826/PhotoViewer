@@ -1,14 +1,11 @@
 package com.photoviewer.ViewModel;
 
 import android.databinding.BindingAdapter;
-import android.webkit.DateSorter;
 import android.widget.TextView;
 
 import com.photoviewer.Model.BandAlbumModel;
-import com.photoviewer.Model.BandListModel;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -28,8 +25,6 @@ public class AlbumListViewModel extends AbstractViewModel {
         super(clickListener);
         this.bandAlbumModel = bandAlbumModel;
     }
-
-    public void onClick(){clickListener.onClick();}
 
     public void onItemClick(){
         clickListener.onItemClick(bandAlbumModel);

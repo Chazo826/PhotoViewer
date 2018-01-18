@@ -31,9 +31,7 @@ public interface BandService {
     @GET("v2/band/album/photos")
     Single<JsonObject> getUserBandsPhotos(@Query("access_token") String accessToken, @Query("band_key") String bandKey, @Query("photo_album_key") String photoAlbumKey);
 
-    @FormUrlEncoded
-    @POST("v2/band/posts")
-    Observable<JsonObject> getNextParams(@Field("after") String after, @Field("limit") int limit,
-                                         @Field("band_key") String bandKey, @Field("access_token") String accessToken,
-                                         @Field("locale") String locale);
+    @GET("v2/band")
+    Observable<JsonObject> getNextParams(@Query("band_key") String bandKey, @Query("access_token") String accessToken);
+
 }

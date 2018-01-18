@@ -9,6 +9,7 @@
     <dimen name="nav_header_height">176dp</dimen>
 
     <dimen name="detail_backdrop_height">55dp</dimen>
-    <dimen name="card_margin">6dp</dimen>
+
+    <dimen name="card_margin">2dp</dimen>
     <dimen name="list_item_avatar_size">40dp</dimen>
 </resources>

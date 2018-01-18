@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.photoviewer.Model.AbstractModel;
+import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
@@ -18,8 +17,6 @@ import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.databinding.ActivityMainBinding;
 
-import java.util.List;
-
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
@@ -27,7 +24,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     private RecyclerView bandListRecyclerview;
     private RecyclerItemAdapter adapter;
-    private Toolbar toolbar;
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
@@ -57,29 +53,23 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     public void initView() {
         getBinding().mainTitle.setText(R.string.main_toolbar_name);
         bandListRecyclerview = getBinding().bandListRecyclerview;
+
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         bandListRecyclerview.setHasFixedSize(true);
         bandListRecyclerview.setLayoutManager(layoutManager);
 
-        adapter = new RecyclerItemAdapter(getApplicationContext(), bandListListener);
+        adapter = new RecyclerItemAdapter(getApplicationContext(), bandListClickListener);
         bandListRecyclerview.setAdapter(adapter);
         adapter.setBandItemList(adapter.parseArrayList());
     }
 
-    ClickListener bandListListener = new ClickListener() {
+    ClickListener bandListClickListener = new ClickListener() {
         @Override
-        public void onClick() {
-
-        }
-
-        @Override
-        public void onItemClick(Object o) {
-            if(o instanceof BandListModel){
-                Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
-                intent.putExtra("band_key", ((BandListModel) o).getBand_key());
-                intent.putExtra("name",((BandListModel) o).getName());
-                startActivity(intent);
-            }
+        public void onItemClick(Object object) {
+            Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
+            intent.putExtra("band_key",((BandListModel) object).getBand_key());
+            intent.putExtra("name", ((BandListModel) object).getName());
+            startActivity(intent);
         }
     };
 

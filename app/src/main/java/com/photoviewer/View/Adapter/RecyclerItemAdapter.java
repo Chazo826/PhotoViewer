@@ -2,8 +2,16 @@ package com.photoviewer.View.Adapter;
 
 import android.content.Context;
 import android.databinding.ViewDataBinding;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
@@ -13,6 +21,7 @@ import com.photoviewer.Model.AbstractModel;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
+import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.ViewModel.AbstractViewModel;
 import com.photoviewer.ViewModel.AlbumListViewModel;
@@ -25,10 +34,8 @@ import com.photoviewer.databinding.ItemMaincardviewBinding;
 import com.photoviewer.databinding.ItemPhotoviewBinding;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 
@@ -57,9 +64,9 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
 
     public void setPhotoItemList(List<? extends AbstractModel> models) {
         List<AbstractViewModel> itemList = new ArrayList<>();
-        if(models.get(0) instanceof BandPhotoModel){
+        if (models.get(0) instanceof BandPhotoModel) {
             for (AbstractModel model : models) {
-                itemList.add(new PhotoListViewModel((BandPhotoModel)model, clickListener));
+                itemList.add(new PhotoListViewModel((BandPhotoModel) model, clickListener));
             }
         }
         this.itemList = itemList;
@@ -81,7 +88,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
     }
 
 
-
     //뷰모델을 리스트로 들고있음
     public void setBandItemList(List<BandListModel> bandListModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
@@ -93,6 +99,7 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         this.itemList = itemList;
         notifyDataSetChanged();
     }
+
 
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
