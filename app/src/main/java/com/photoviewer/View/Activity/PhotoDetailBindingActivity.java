@@ -12,7 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandPhotoModel;
@@ -74,33 +76,9 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
         viewPager.setAdapter(photoPagerAdapter);
 
         if (isSlideShow) {
-            setAutoPager();
+            photoPagerAdapter.setAutoPager();
         }
     }
-
-
-    private void setAutoPager() {
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(currentPage, true);
-                if (currentPage == bandPhotoModelList.size()) {
-                    currentPage = 0;
-                } else {
-                    ++currentPage;
-                }
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(runnable);
-            }
-        }, 1500, 1200);
-    }
-
 
     public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
@@ -133,7 +111,8 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
                             false);
 
             itemPhotodetailBinding.setViewModel(new PhotoDetailViewModel(bandPhotoModelList.get(position)));
-            container.addView(itemPhotodetailBinding.getRoot());
+            container.addView(itemPhotodetailBinding.getRoot(), RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+
             return itemPhotodetailBinding.getRoot();
         }
 
@@ -142,10 +121,28 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
             return view == object;
         }
 
-        @Override
-        public int getItemPosition(@NonNull Object object) {
-            return super.getItemPosition(object);
+        public void setAutoPager() {
+            final Handler handler = new Handler();
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    viewPager.setCurrentItem(currentPage, true);
+                    if (currentPage == bandPhotoModelList.size()) {
+                        finish();
+                    } else {
+                        ++currentPage;
+                    }
+                }
+            };
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(runnable);
+                }
+            }, 1500, 2000);
         }
     }
+
 
 }

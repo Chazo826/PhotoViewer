@@ -18,6 +18,7 @@ import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
+import com.photoviewer.ViewModel.ItemClickListener;
 import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoBinding;
 
@@ -32,11 +33,14 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
+
     private RecyclerView recyclerView;
     private RecyclerItemAdapter adapter;
+
     private String albumKey;
     private String bandKey;
     private String albumName;
+
     private MenuItem menuItem;
 
     @Override
@@ -58,12 +62,6 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
         setToolbarTitleText(albumName);
 
         requestRetrofitFactory.getBandPhotoList(consumer, bandKey, albumKey);
-    }
-
-    public boolean slideExecuter() {
-        //TODO : toolbar 버튼 클릭 시, intent로 true 전달
-
-        return true;
     }
 
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
@@ -104,6 +102,7 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
             }
         }
     };
+
 
     @Override
     public boolean onCreateOptionsMenu(android.view.Menu menu) {

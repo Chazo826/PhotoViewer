@@ -16,7 +16,6 @@ import com.photoviewer.Model.BandPhotoModel;
 public class PhotoListViewModel extends AbstractViewModel {
 
     private BandPhotoModel bandPhotoModel;
-    private View.OnClickListener onTitleClickListener;
 
     public PhotoListViewModel(BandPhotoModel bandPhotoModel, ClickListener clickListener) {
         super(clickListener);

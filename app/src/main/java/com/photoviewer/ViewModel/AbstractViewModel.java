@@ -8,6 +8,7 @@ abstract public class AbstractViewModel {
 
     protected ClickListener clickListener;
 
+
     public AbstractViewModel() {
     }
 

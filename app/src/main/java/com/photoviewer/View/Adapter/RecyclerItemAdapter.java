@@ -20,6 +20,7 @@ import com.photoviewer.ViewModel.AlbumListViewModel;
 import com.photoviewer.ViewModel.BandListViewModel;
 import com.photoviewer.ViewModel.ClickListener;
 import com.photoviewer.ViewModel.BindListViewType;
+import com.photoviewer.ViewModel.ItemClickListener;
 import com.photoviewer.ViewModel.PhotoListViewModel;
 import com.photoviewer.databinding.ItemAlbumcardviewBinding;
 import com.photoviewer.databinding.ItemMaincardviewBinding;
