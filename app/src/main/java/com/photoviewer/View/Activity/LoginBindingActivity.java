@@ -17,8 +17,8 @@ import io.reactivex.annotations.NonNull;
  * Created by ssion.dev
  */
 
-public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+public class LoginBindingActivity extends BaseBindingActivity<ActivityLoginBinding> {
+    private static final String TAG = LoginBindingActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -27,8 +27,8 @@ public class LoginActivity extends BaseActivity<ActivityLoginBinding> {
     }
 
     public void initDataBinding(){
-        setBinding(R.layout.activity_login);
-        getBinding().setLoginActivity(this);
+        setActivityLayout(R.layout.activity_login);
+        getActivityBinding().setLoginActivity(this);
     }
 
     public void startRedirectActivity(View view) {

@@ -36,6 +36,7 @@ public class RequestRetrofitFactory {
     public CompositeDisposable getCompositeDisposable(){
         return mCompositeDisposable;
     }
+
     public Single<AuthorizationInfo> getRequestRetrofit(String received_authorization_code) {
         return tokenService.getAuthCodeForLogin(received_authorization_code,
                         ApiFactory.getInstance().getBase64Encode())
@@ -69,21 +70,10 @@ public class RequestRetrofitFactory {
                         .subscribe(consumer));
     }
 
-    public void getNextParams(Consumer<JsonObject> consumer,String after, String bandKey){
-        mCompositeDisposable.add(bandService.getNextParams(bandKey, after, deliverAccessToken())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer));
-    }
-
     public void saveJsonToPref(Object modelObject) {
         if (modelObject != null) {
             if (modelObject instanceof AuthorizationInfo) {
                 pref.putJson(Pref.ACCESS_TOKEN_KEY, modelObject);
-            } else if (modelObject instanceof BandAlbumModel) {
-                pref.putJson(Pref.BAND_ALBUM_KEY, modelObject);
-            } else {
-                pref.putJson(Pref.BAND_PHOTO_KEY, modelObject);
             }
         }
     }

@@ -3,12 +3,13 @@ package com.photoviewer.View.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.R;
@@ -19,9 +20,10 @@ import com.photoviewer.databinding.ActivityMainBinding;
 
 import io.reactivex.functions.Consumer;
 
-public class MainActivity extends BaseActivity<ActivityMainBinding> {
+public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding> {
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private TextView tvTitleView;
     private RecyclerView bandListRecyclerview;
     private RecyclerItemAdapter adapter;
 
@@ -31,8 +33,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setBinding(R.layout.activity_main);
+        setContentLayout(R.layout.activity_main);
 
+        setToolbarBackButtonVisibility(TAG, View.GONE);
         pref.setContext(this);
         requestRetrofitFactory.getBandListRetrofit(consumer);
     }
@@ -51,8 +54,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     };
 
     public void initView() {
-        getBinding().mainTitle.setText(R.string.main_toolbar_name);
-        bandListRecyclerview = getBinding().bandListRecyclerview;
+        tvTitleView = getContentBinding().mainTitle;
+        tvTitleView.setText(R.string.main_toolbar_name);
+
+        bandListRecyclerview = getContentBinding().bandListRecyclerview;
 
         GridLayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 2);
         bandListRecyclerview.setHasFixedSize(true);
@@ -66,8 +71,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     ClickListener bandListClickListener = new ClickListener() {
         @Override
         public void onItemClick(Object object) {
-            Intent intent = new Intent(MainActivity.this, AlbumListActivity.class);
-            intent.putExtra("band_key",((BandListModel) object).getBand_key());
+            Intent intent = new Intent(MainActivity.this, AlbumListBindingActivity.class);
+            intent.putExtra("band_key", ((BandListModel) object).getBand_key());
             intent.putExtra("name", ((BandListModel) object).getName());
             startActivity(intent);
         }
@@ -77,5 +82,17 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+//    @NonNull
+//    private RestaurantListAdapter.OnItemClickListener startRestaurantDetailActivity() {
+//        return new RestaurantListAdapter.OnItemClickListener() {
+//            @Override
+//            public void onClick(Restaurant restaurant) {
+//                Intent intent = new Intent(MainActivity.this, RestaurantDetailActivity.class);
+//                intent.putExtra("restaurant_id", restaurant.getId());
+//                startActivity(intent);
+//            }
+//        };
+//    }
 
 }

@@ -12,9 +12,9 @@ import com.photoviewer.Utils.Pref;
  */
 
 
-public class TokenCheckActivity extends BaseActivity {
+public class TokenCheckBindingActivity extends BaseBindingActivity {
 
-    private static final String TAG = TokenCheckActivity.class.getSimpleName();
+    private static final String TAG = TokenCheckBindingActivity.class.getSimpleName();
 
     private Pref pref = Pref.getInstance();
     private AuthorizationInfo authorizationInfo;
@@ -32,11 +32,11 @@ public class TokenCheckActivity extends BaseActivity {
 
         if(authorizationInfo != null){
             //로그인 토큰이 있는 경우 -> 종료 후 메인
-            startActivity(new Intent(TokenCheckActivity.this, MainActivity.class));
+            startActivity(new Intent(TokenCheckBindingActivity.this, MainActivity.class));
             finish();
         } else {
             //로그인 토큰이 없는 경우 -> 로그인 화면
-            startActivity(new Intent(TokenCheckActivity.this, LoginActivity.class));
+            startActivity(new Intent(TokenCheckBindingActivity.this, LoginBindingActivity.class));
             finish();
         }
     }

@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.gson.Gson;
@@ -19,6 +18,7 @@ import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.View.Adapter.RecyclerItemAdapter;
 import com.photoviewer.ViewModel.ClickListener;
+import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoBinding;
 
 import java.lang.reflect.Type;
@@ -27,12 +27,8 @@ import java.util.List;
 
 import io.reactivex.functions.Consumer;
 
-/**
- * Created by user on 2017. 12. 20..
- */
-
-public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
-    private static final String TAG = PhotoActivity.class.getSimpleName();
+public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPhotoBinding> {
+    private static final String TAG = PhotoBindingActivity.class.getSimpleName();
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
@@ -40,13 +36,17 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
     private RecyclerItemAdapter adapter;
     private String albumKey;
     private String bandKey;
-    private Toolbar toolbar;
+    private String albumName;
+    private MenuItem menuItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initDataBinding();
+        setContentLayout(R.layout.activity_photo);
+
+        setToolbarBackButtonVisibility(TAG, View.VISIBLE);
+
         pref.setContext(this);
         getAlbumKeyIntent(getIntent());
     }
@@ -54,22 +54,24 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
     public void getAlbumKeyIntent(Intent intent) {
         bandKey = intent.getStringExtra("band_key");
         albumKey = intent.getStringExtra("album_key");
+        albumName = intent.getStringExtra("album_name");
+        setToolbarTitleText(albumName);
+
         requestRetrofitFactory.getBandPhotoList(consumer, bandKey, albumKey);
+    }
+
+    public boolean slideExecuter() {
+        //TODO : toolbar 버튼 클릭 시, intent로 true 전달
+
+        return true;
     }
 
     Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
         @Override
         public void accept(JsonObject jsonObject) throws Exception {
             int result = jsonObject.get("result_code").getAsInt();
+
             if (result == 1) {
-//                JsonObject test = jsonObject.get("result_data").getAsJsonObject()
-//                        .get("paging").getAsJsonObject();
-//                if (test.has("next_params")) {
-//                    String afterValue = test.get("next_params").getAsJsonObject().get("after").getAsString();
-//                   if(!afterValue.contains("null")){
-//                       requestRetrofitFactory.getNextParams(consumer, afterValue, bandKey);
-//                   }
-//                }
                 JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
                         .get("items").getAsJsonArray();
                 pref.putString(Pref.BAND_PHOTO_KEY + albumKey, jsonArray.toString());
@@ -79,12 +81,8 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
         }
     };
 
-    public void initDataBinding() {
-        setBinding(R.layout.activity_photo);
-    }
-
     public void initView() {
-        recyclerView = getBinding().photoRecyclerview;
+        recyclerView = getContentBinding().photoRecyclerview;
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
@@ -93,47 +91,41 @@ public class PhotoActivity extends BaseActivity<ActivityPhotoBinding> {
         adapter = new RecyclerItemAdapter(getApplicationContext(), photoListListener);
         recyclerView.setAdapter(adapter);
         adapter.setPhotoItemList(parseArrayList());
-
-        setToolbar();
-
-    }
-
-    public void setToolbar() {
-        getBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
-        getBinding().albumSlideBtn.setVisibility(View.VISIBLE);
-        getBinding().albumSlideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //슬라이드 쇼 실행
-
-            }
-        });
-
-        getBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
     }
 
     ClickListener photoListListener = new ClickListener() {
-
         @Override
         public void onItemClick(Object o) {
             if (o instanceof BandPhotoModel) {
-                Intent intent = new Intent(PhotoActivity.this, PhotoDetailActivity.class);
+                Intent intent = new Intent(PhotoBindingActivity.this, PhotoDetailBindingActivity.class);
                 intent.putExtra("album_key", albumKey);
+                intent.putExtra("slide_show", false);
                 startActivity(intent);
             }
         }
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_photo_detail, menu);
+        menuItem = menu.findItem(R.id.action_photo_slide);
+
+        menuItem.setVisible(true);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_photo_slide:
+                Intent intent = new Intent(PhotoBindingActivity.this, PhotoDetailBindingActivity.class);
+                intent.putExtra("album_key", albumKey);
+                intent.putExtra("slide_show", true);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public List<BandPhotoModel> parseArrayList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);

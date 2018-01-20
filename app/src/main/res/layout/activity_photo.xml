@@ -17,22 +17,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:contentInsetLeft="0dp">
-
-            <ImageView
-                android:id="@+id/album_slide_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="260dp"
-                android:src="@drawable/ic_action_name"
-                android:visibility="visible" />
-
-        </android.support.v7.widget.Toolbar>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

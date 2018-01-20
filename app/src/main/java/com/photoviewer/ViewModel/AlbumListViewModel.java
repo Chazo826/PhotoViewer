@@ -1,6 +1,8 @@
 package com.photoviewer.ViewModel;
 
+import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.view.View;
 import android.widget.TextView;
 
 import com.photoviewer.Model.BandAlbumModel;

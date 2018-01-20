@@ -5,7 +5,7 @@
 
     <data>
         <import type="android.view.View"/>
-        <variable name="LoginActivity" type="com.photoviewer.View.Activity.LoginActivity"/>
+        <variable name="LoginActivity" type="com.photoviewer.View.Activity.LoginBindingActivity"/>
     </data>
 
     <LinearLayout

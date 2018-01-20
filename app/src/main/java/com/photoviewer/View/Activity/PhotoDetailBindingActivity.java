@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
-import com.photoviewer.View.Adapter.AutoSlideListener;
 import com.photoviewer.ViewModel.PhotoDetailViewModel;
 import com.photoviewer.databinding.ActivityPhotoDetailBinding;
 import com.photoviewer.databinding.ItemPhotodetailBinding;
@@ -33,13 +32,14 @@ import java.util.TimerTask;
  * Created by user on 2018. 1. 14..
  */
 
-public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding> {
-    private static final String TAG = PhotoDetailActivity.class.getSimpleName();
+public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<ActivityPhotoDetailBinding> {
+    private static final String TAG = PhotoDetailBindingActivity.class.getSimpleName();
 
     private ViewPager viewPager;
     private PhotoPagerAdapter photoPagerAdapter;
     private String albumKey;
     private int currentPage = 0;
+    private Boolean isSlideShow;
 
     private List<BandPhotoModel> bandPhotoModelList = new ArrayList<>();
     private Pref pref = Pref.getInstance();
@@ -47,28 +47,58 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initDataBinding();
+
+        setContentLayout(R.layout.activity_photo_detail);
+        setToolbarBackButtonVisibility(TAG, View.VISIBLE);
         getIntentData(getIntent());
+
         initView();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
     public void getIntentData(Intent intent) {
         albumKey = intent.getStringExtra("album_key");
-    }
-
-    public void initDataBinding() {
-        setBinding(R.layout.activity_photo_detail);
+        isSlideShow = intent.getBooleanExtra("slide_show", false);
     }
 
     public void initView() {
-        viewPager = getBinding().detailViewPager;
+        viewPager = getContentBinding().detailViewPager;
         bandPhotoModelList = parseArrayList();
 
         photoPagerAdapter = new PhotoPagerAdapter();
         viewPager.setAdapter(photoPagerAdapter);
 
-        setAutoPager();
+        if (isSlideShow) {
+            setAutoPager();
+        }
+    }
+
+
+    private void setAutoPager() {
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(currentPage, true);
+                if (currentPage == bandPhotoModelList.size()) {
+                    currentPage = 0;
+                } else {
+                    ++currentPage;
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnable);
+            }
+        }, 1500, 1200);
     }
 
 
@@ -118,25 +148,4 @@ public class PhotoDetailActivity extends BaseActivity<ActivityPhotoDetailBinding
         }
     }
 
-    private void setAutoPager() {
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                viewPager.setCurrentItem(currentPage, true);
-                if (currentPage == bandPhotoModelList.size()) {
-                    currentPage = 0;
-                } else {
-                    ++currentPage;
-                }
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(runnable);
-            }
-        }, 1500, 2000);
-    }
 }

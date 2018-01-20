@@ -1,17 +1,10 @@
 package com.photoviewer.View.Adapter;
 
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
@@ -21,7 +14,6 @@ import com.photoviewer.Model.AbstractModel;
 import com.photoviewer.Model.BandAlbumModel;
 import com.photoviewer.Model.BandListModel;
 import com.photoviewer.Model.BandPhotoModel;
-import com.photoviewer.R;
 import com.photoviewer.Utils.Pref;
 import com.photoviewer.ViewModel.AbstractViewModel;
 import com.photoviewer.ViewModel.AlbumListViewModel;
@@ -61,34 +53,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         return list;
     }
 
-
-    public void setPhotoItemList(List<? extends AbstractModel> models) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
-        if (models.get(0) instanceof BandPhotoModel) {
-            for (AbstractModel model : models) {
-                itemList.add(new PhotoListViewModel((BandPhotoModel) model, clickListener));
-            }
-        }
-        this.itemList = itemList;
-        notifyDataSetChanged();
-    }
-
-
-    //앨범모델 리스트로 들고있음
-    public void setAlbumItemList(List<BandAlbumModel> bandAlbumModels) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
-
-        for (BandAlbumModel bandAlbumModel : bandAlbumModels) {
-            itemList.add(new AlbumListViewModel(bandAlbumModel, clickListener));
-        }
-
-        this.itemList = itemList;
-        Collections.reverse(itemList);
-        notifyDataSetChanged();
-    }
-
-
-    //뷰모델을 리스트로 들고있음
     public void setBandItemList(List<BandListModel> bandListModels) {
         List<AbstractViewModel> itemList = new ArrayList<>();
 
@@ -100,6 +64,26 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         notifyDataSetChanged();
     }
 
+    public void setAlbumItemList(List<BandAlbumModel> bandAlbumModels) {
+        List<AbstractViewModel> itemList = new ArrayList<>();
+
+        for (BandAlbumModel bandAlbumModel : bandAlbumModels) {
+            itemList.add(new AlbumListViewModel(bandAlbumModel, clickListener));
+        }
+        this.itemList = itemList;
+        Collections.reverse(itemList);
+        notifyDataSetChanged();
+    }
+
+    public void setPhotoItemList(List<BandPhotoModel> bandPhotoModels) {
+        List<AbstractViewModel> itemList = new ArrayList<>();
+
+        for (BandPhotoModel model : bandPhotoModels) {
+            itemList.add(new PhotoListViewModel(model, clickListener));
+        }
+        this.itemList = itemList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -118,6 +102,11 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
     @Override
     public void onBindViewHolder(BindingViewHolder holder, int position) {
         holder.bind(itemList.get(position));
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     @Override
@@ -140,7 +129,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         }
 
         public void bind(VM viewmodel) {
-            this.viewmodel = viewmodel;
             binding.setVariable(BR.viewModel, viewmodel);
             binding.executePendingBindings();
         }

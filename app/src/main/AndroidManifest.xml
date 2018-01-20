@@ -12,16 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".View.Activity.TokenCheckActivity">
+        <activity android:name=".View.Activity.TokenCheckBindingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".View.Activity.LoginActivity"/>
+        <activity android:name=".View.Activity.LoginBindingActivity"/>
 
-        <activity android:name=".View.Activity.RedirectActivity">
+        <activity android:name=".View.Activity.RedirectBindingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -37,11 +37,11 @@
 
         <activity android:name=".View.Activity.MainActivity"/>
 
-        <activity android:name=".View.Activity.AlbumListActivity" />
+        <activity android:name=".View.Activity.AlbumListBindingActivity" />
 
-        <activity android:name=".View.Activity.PhotoActivity"/>
+        <activity android:name=".View.Activity.PhotoBindingActivity"/>
 
-        <activity android:name=".View.Activity.PhotoDetailActivity"/>
+        <activity android:name=".View.Activity.PhotoDetailBindingActivity"/>
 
     </application>
 

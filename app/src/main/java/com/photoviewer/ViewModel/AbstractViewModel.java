@@ -16,4 +16,5 @@ abstract public class AbstractViewModel {
     }
 
     abstract public BindListViewType getViewType();
+
 }

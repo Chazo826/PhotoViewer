@@ -4,16 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.photoviewer.Model.AuthorizationInfo;
 import com.photoviewer.NetworkManager.RequestRetrofitFactory;
 import com.photoviewer.Utils.Pref;
 
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-
-import static android.content.ContentValues.TAG;
 
 
 /**
@@ -21,8 +17,8 @@ import static android.content.ContentValues.TAG;
  *
  */
 
-public class RedirectActivity extends BaseActivity {
-    private final String TAG = RedirectActivity.class.getSimpleName();
+public class RedirectBindingActivity extends BaseBindingActivity {
+    private final String TAG = RedirectBindingActivity.class.getSimpleName();
 
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
@@ -51,7 +47,7 @@ public class RedirectActivity extends BaseActivity {
                     requestRetrofitFactory.getRequestRetrofit(auth_token)
                     .subscribe(consumer));
         } else {
-            startActivity(new Intent(RedirectActivity.this, LoginActivity.class));
+            startActivity(new Intent(RedirectBindingActivity.this, LoginBindingActivity.class));
             finish();
         }
     }
@@ -65,7 +61,7 @@ public class RedirectActivity extends BaseActivity {
     };
 
     public void startMainActivity() {
-        startActivity(new Intent(RedirectActivity.this, MainActivity.class));
+        startActivity(new Intent(RedirectBindingActivity.this, MainActivity.class));
         finish();
     }
 

@@ -1,6 +1,8 @@
 package com.photoviewer.ViewModel;
 
 import android.databinding.BindingAdapter;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -14,6 +16,7 @@ import com.photoviewer.Model.BandPhotoModel;
 public class PhotoListViewModel extends AbstractViewModel {
 
     private BandPhotoModel bandPhotoModel;
+    private View.OnClickListener onTitleClickListener;
 
     public PhotoListViewModel(BandPhotoModel bandPhotoModel, ClickListener clickListener) {
         super(clickListener);
@@ -55,7 +58,9 @@ public class PhotoListViewModel extends AbstractViewModel {
     }
 
     @BindingAdapter("bind:startSlideOption")
-    public void startSlideOption(ImageView photoView, String url) {
+    public static void startSlideOption(ImageView photoView, String url) {
         Glide.with(photoView.getContext()).load(url).into(photoView);
     }
+
+
 }

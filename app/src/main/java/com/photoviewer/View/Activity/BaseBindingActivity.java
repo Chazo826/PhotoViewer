@@ -12,18 +12,18 @@ import android.view.WindowManager;
  * 여기서 재사용가능한 툴바 붙이고
  */
 
-public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
+public abstract class BaseBindingActivity<T extends ViewDataBinding> extends AppCompatActivity {
 
-    private T databindingClass;
+    private T activityBinding;
 
-    protected void setBinding(@LayoutRes int layoutId) {
-        if (databindingClass == null) {
-            databindingClass = DataBindingUtil.setContentView(this, layoutId);
+    public void setActivityLayout(@LayoutRes int layoutId) {
+        if (activityBinding == null) {
+            activityBinding = DataBindingUtil.setContentView(this, layoutId);
         }
     }
 
-    protected T getBinding() {
-        return databindingClass;
+    public T getActivityBinding() {
+        return activityBinding;
     }
 
     @Override
@@ -31,7 +31,6 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-
     }
 
 }

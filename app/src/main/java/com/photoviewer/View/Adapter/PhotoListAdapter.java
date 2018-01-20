@@ -1,7 +1,6 @@
 package com.photoviewer.View.Adapter;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.photoviewer.Model.BandPhotoModel;
 import com.photoviewer.R;
-import com.photoviewer.View.Activity.PhotoDetailActivity;
+import com.photoviewer.View.Activity.PhotoDetailBindingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,7 @@ public class PhotoListAdapter extends RecyclerView.Adapter<PhotoListAdapter.Phot
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(holder.itemView.getContext(), PhotoDetailActivity.class);
+                Intent intent = new Intent(holder.itemView.getContext(), PhotoDetailBindingActivity.class);
                 intent.putExtra("photo_key", items.getPhoto_key());
                 intent.putExtra("url", items.getUrl());
                 holder.itemView.getContext().startActivity(intent);
